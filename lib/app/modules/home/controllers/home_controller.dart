@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
 class HomeController extends GetxController {
-  StateMachineController? _controller;
   SMIInput<bool>? _speakInput;
   SMIInput<bool>? _sAndOInput;
   SMIInput<bool>? _thoughtInput;
@@ -16,7 +15,6 @@ class HomeController extends GetxController {
     );
     if (controller != null) {
       artboard.addController(controller);
-      _controller = controller;
 
       // Find inputs by name and store references
       _speakInput = controller.findInput<bool>('Speak');

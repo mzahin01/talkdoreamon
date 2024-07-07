@@ -8,46 +8,61 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomeView'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              RiveAnimation.asset(
-                'assets/rive/copybilai.riv',
-                fit: BoxFit.contain,
-                onInit: controller.onRiveInit,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/back.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: SizedBox(
+                width: 300,
+                height: 300,
+                child: RiveAnimation.asset(
+                  'assets/rive/copybilai.riv',
+                  fit: BoxFit.contain,
+                  onInit: controller.onRiveInit,
+                ),
               ),
-              Row(
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: controller.triggerSpeak,
-                    child: const Text('Trigger Speak'),
+                    child: const Text('Speak'),
                   ),
                   ElevatedButton(
                     onPressed: controller.triggerSAndO,
-                    child: const Text('Trigger S&O'),
+                    child: const Text('S&O'),
                   ),
                   ElevatedButton(
                     onPressed: controller.triggerThought,
-                    child: const Text('Trigger Thought'),
+                    child: const Text('Thought'),
                   ),
                   ElevatedButton(
                     onPressed: controller.triggerHiDoremon,
-                    child: const Text('Trigger HiDoremon'),
+                    child: const Text('HiDoremon'),
                   ),
                   ElevatedButton(
                     onPressed: controller.triggerSunnahSmile,
-                    child: const Text('Trigger SunnahSmile'),
+                    child: const Text('Smile'),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
