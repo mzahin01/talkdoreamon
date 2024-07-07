@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "834030680551",
+    "project_id": "talkdoraemon",
+    "storage_bucket": "talkdoraemon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834030680551:android:01058292bd91514a312542",
+        "android_client_info": {
+          "package_name": "com.arrijal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-QqqvgEKRPnMWcCNMdyLOzedJdYHaE_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
