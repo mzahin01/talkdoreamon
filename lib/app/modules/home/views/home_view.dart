@@ -32,6 +32,25 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: controller.triggerThought,
+                    child: const Text('Thought'),
+                  ),
+                  ElevatedButton(
+                    onPressed: controller.triggerHiDoremon,
+                    child: const Text('HiDoremon'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -45,14 +64,6 @@ class HomeView extends GetView<HomeController> {
                   ElevatedButton(
                     onPressed: controller.triggerSAndO,
                     child: const Text('S&O'),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.triggerThought,
-                    child: const Text('Thought'),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.triggerHiDoremon,
-                    child: const Text('HiDoremon'),
                   ),
                   ElevatedButton(
                     onPressed: controller.triggerSunnahSmile,
