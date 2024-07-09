@@ -32,17 +32,23 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedContainer(
-                margin: controller.GadBool.value
-                    ? const EdgeInsets.only(bottom: 145)
-                    : const EdgeInsets.only(bottom: 190),
-                height: 30,
-                width: 85,
-                color: Colors.amber,
-                duration: const Duration(seconds: 2),
-                curve: Curves.fastOutSlowIn,
+            ClipRect(
+              clipper: CustomClipperRect(),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: AnimatedContainer(
+                  margin:
+                      EdgeInsets.only(bottom: controller.AnimeBottMargin.value),
+                  height: controller.AnimeContHeight.value,
+                  width: controller.AnimeContWidth.value,
+                  color: Colors.transparent,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  child: Image.asset(
+                    'assets/images/bdflag.png',
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
               ),
             ),
             Align(
@@ -91,5 +97,18 @@ class HomeView extends GetView<HomeController> {
         ),
       );
     });
+  }
+}
+
+class CustomClipperRect extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    // Define the visible area
+    return Rect.fromLTWH(0, 0, size.width, size.height - 175);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return false;
   }
 }

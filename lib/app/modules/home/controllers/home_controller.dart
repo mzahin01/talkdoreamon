@@ -5,6 +5,9 @@ import 'package:rive/rive.dart';
 
 class HomeController extends GetxController {
   RxBool GadBool = true.obs;
+  RxDouble AnimeContHeight = 30.0.obs;
+  RxDouble AnimeContWidth = 30.0.obs;
+  RxDouble AnimeBottMargin = 30.0.obs;
 
   SMIInput<bool>? _speakInput;
   SMIInput<bool>? _sAndOInput;
@@ -19,69 +22,43 @@ class HomeController extends GetxController {
     );
     if (controller != null) {
       artboard.addController(controller);
-
-      // Find inputs by name and store references
       _speakInput = controller.findInput<bool>('Speak');
       _sAndOInput = controller.findInput<bool>('S&O');
       _thoughtInput = controller.findInput<bool>('Thought');
       _hiDoremonInput = controller.findInput<bool>('HiDoremon');
       _sunnahSmileInput = controller.findInput<bool>('SunnahSmile');
-
-      // Log the inputs to verify they are correctly found
-      print('Speak Input: $_speakInput');
-      print('S&O Input: $_sAndOInput');
-      print('Thought Input: $_thoughtInput');
-      print('HiDoremon Input: $_hiDoremonInput');
-      print('SunnahSmile Input: $_sunnahSmileInput');
-    } else {
-      print('Error: StateMachineController is null');
     }
   }
 
-  // Functions to trigger inputs
   void triggerSpeak() {
     if (_speakInput != null) {
       _speakInput!.value = true;
-      print('Speak input triggered');
-    } else {
-      print('Error: Speak input is null');
     }
   }
 
   void triggerSAndO() {
-    if (_sAndOInput != null) {
-      _sAndOInput!.value = true;
-      GadBool.value = !GadBool.value;
-      print('S&O input triggered, GadBool: ${GadBool.value}');
-    } else {
-      print('Error: S&O input is null');
-    }
+    _sAndOInput!.value = true;
+    Future.delayed(const Duration(milliseconds: 1400), () {
+      AnimeContHeight.value = 200;
+      AnimeContWidth.value = 275;
+      AnimeBottMargin.value = 190;
+    });
+    Future.delayed(const Duration(milliseconds: 3400), () {
+      AnimeContHeight.value = 30;
+      AnimeContWidth.value = 30;
+      AnimeBottMargin.value = 30;
+    });
   }
 
   void triggerThought() {
-    if (_thoughtInput != null) {
-      _thoughtInput!.value = true;
-      print('Thought input triggered');
-    } else {
-      print('Error: Thought input is null');
-    }
+    _thoughtInput!.value = true;
   }
 
   void triggerHiDoremon() {
-    if (_hiDoremonInput != null) {
-      _hiDoremonInput!.value = true;
-      print('HiDoremon input triggered');
-    } else {
-      print('Error: HiDoremon input is null');
-    }
+    _hiDoremonInput!.value = true;
   }
 
   void triggerSunnahSmile() {
-    if (_sunnahSmileInput != null) {
-      _sunnahSmileInput!.value = true;
-      print('SunnahSmile input triggered');
-    } else {
-      print('Error: SunnahSmile input is null');
-    }
+    _sunnahSmileInput!.value = true;
   }
 }
