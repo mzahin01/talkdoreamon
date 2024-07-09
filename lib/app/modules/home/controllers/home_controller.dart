@@ -37,16 +37,19 @@ class HomeController extends GetxController {
   }
 
   void triggerSAndO() {
+    AnimeContHeight.value = 0;
+    AnimeContWidth.value = 0;
+    AnimeBottMargin.value = 30;
     _sAndOInput!.value = true;
-    Future.delayed(const Duration(milliseconds: 1400), () {
+    Future.delayed(const Duration(milliseconds: 2700), () {
       AnimeContHeight.value = 200;
       AnimeContWidth.value = 275;
       AnimeBottMargin.value = 190;
     });
-    Future.delayed(const Duration(milliseconds: 3400), () {
+    Future.delayed(const Duration(milliseconds: 5400), () {
       AnimeContHeight.value = 30;
       AnimeContWidth.value = 30;
-      AnimeBottMargin.value = 30;
+      AnimeBottMargin.value = 2000;
     });
   }
 
