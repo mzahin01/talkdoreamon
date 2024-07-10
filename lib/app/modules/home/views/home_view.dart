@@ -42,7 +42,8 @@ class HomeView extends GetView<HomeController> {
                   height: controller.AnimeContHeight.value,
                   width: controller.AnimeContWidth.value,
                   color: Colors.transparent,
-                  duration: const Duration(milliseconds: 300),
+                  duration:
+                      Duration(milliseconds: controller.AnimeDuration.value),
                   curve: Curves.easeOut,
                   child: Image.asset(
                     'assets/images/bdflag.png',

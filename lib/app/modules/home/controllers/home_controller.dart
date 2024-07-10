@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
 class HomeController extends GetxController {
-  RxBool GadBool = true.obs;
   RxDouble AnimeContHeight = 30.0.obs;
   RxDouble AnimeContWidth = 30.0.obs;
   RxDouble AnimeBottMargin = 30.0.obs;
+  RxInt AnimeDuration = 300.obs;
 
   SMIInput<bool>? _speakInput;
   SMIInput<bool>? _sAndOInput;
@@ -37,11 +37,14 @@ class HomeController extends GetxController {
   }
 
   void triggerSAndO() {
+    triggerThought();
     AnimeContHeight.value = 0;
     AnimeContWidth.value = 0;
     AnimeBottMargin.value = 30;
+    AnimeDuration.value = 300;
     _sAndOInput!.value = true;
     Future.delayed(const Duration(milliseconds: 2700), () {
+      triggerThought();
       AnimeContHeight.value = 200;
       AnimeContWidth.value = 275;
       AnimeBottMargin.value = 190;
