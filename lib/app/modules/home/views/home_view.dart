@@ -55,10 +55,14 @@ class HomeView extends GetView<HomeController> {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(top: 100.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    ElevatedButton(
+                      onPressed: controller.triggerEat,
+                      child: const Text('EatDora'),
+                    ),
                     ElevatedButton(
                       onPressed: controller.triggerThought,
                       child: const Text('Thought'),

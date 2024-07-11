@@ -8,6 +8,7 @@ class HomeController extends GetxController {
   RxDouble AnimeContWidth = 30.0.obs;
   RxDouble AnimeBottMargin = 30.0.obs;
   RxInt AnimeDuration = 300.obs;
+  RxString MyArtboard = 'Usual'.obs;
 
   SMIInput<bool>? _speakInput;
   SMIInput<bool>? _sAndOInput;
@@ -18,7 +19,7 @@ class HomeController extends GetxController {
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
       artboard,
-      'State Machine 1',
+      'DoraCake',
     );
     if (controller != null) {
       artboard.addController(controller);
@@ -54,6 +55,14 @@ class HomeController extends GetxController {
       AnimeContWidth.value = 30;
       AnimeBottMargin.value = 2000;
     });
+  }
+
+  void triggerEat() {
+    if (MyArtboard.value == 'Usual') {
+      MyArtboard.value == 'DoraCake';
+    } else {
+      MyArtboard.value = 'Usual';
+    }
   }
 
   void triggerThought() {
