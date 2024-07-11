@@ -43,20 +43,20 @@ class HomeController extends GetxController {
     AnimeBottMargin.value = 30;
     AnimeDuration.value = 300;
     _sAndOInput!.value = true;
-    await Future.delayed(const Duration(milliseconds: 1700), () {
+    await Future.delayed(const Duration(milliseconds: 2000), () {
       triggerThought();
     });
-    await Future.delayed(const Duration(milliseconds: 1000), () {
+    await Future.delayed(const Duration(milliseconds: 700), () {
       AnimeContHeight.value = 200;
       AnimeContWidth.value = 275;
-      AnimeBottMargin.value = 230;
+      AnimeBottMargin.value = 250;
       AnimeDuration.value = 250;
     });
-    await Future.delayed(const Duration(milliseconds: 5400), () {
+    await Future.delayed(const Duration(milliseconds: 2000), () {
       AnimeContHeight.value = 30;
       AnimeContWidth.value = 30;
       AnimeBottMargin.value = 2000;
-      AnimeDuration.value = 50;
+      AnimeDuration.value = 300;
     });
   }
 
