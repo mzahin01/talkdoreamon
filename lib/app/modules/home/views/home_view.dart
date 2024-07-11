@@ -60,10 +60,6 @@ class HomeView extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: controller.triggerEat,
-                      child: const Text('Eat'),
-                    ),
-                    ElevatedButton(
                       onPressed: controller.triggerThought,
                       child: const Text('Tht'),
                     ),
