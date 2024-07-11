@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
 class HomeController extends GetxController {
-  RxDouble AnimeContHeight = 30.0.obs;
-  RxDouble AnimeContWidth = 30.0.obs;
-  RxDouble AnimeBottMargin = 30.0.obs;
+  RxDouble AnimeContHeight = 50.0.obs;
+  RxDouble AnimeContWidth = 100.0.obs;
+  RxDouble AnimeBottMargin = 170.0.obs;
   RxInt AnimeDuration = 300.obs;
 
   SMIInput<bool>? _speakInput;
@@ -36,23 +36,27 @@ class HomeController extends GetxController {
     }
   }
 
-  void triggerSAndO() {
+  Future<void> triggerSAndO() async {
     triggerThought();
     AnimeContHeight.value = 0;
     AnimeContWidth.value = 0;
     AnimeBottMargin.value = 30;
     AnimeDuration.value = 300;
     _sAndOInput!.value = true;
-    Future.delayed(const Duration(milliseconds: 2700), () {
+    await Future.delayed(const Duration(milliseconds: 1700), () {
       triggerThought();
+    });
+    await Future.delayed(const Duration(milliseconds: 1000), () {
       AnimeContHeight.value = 200;
       AnimeContWidth.value = 275;
-      AnimeBottMargin.value = 190;
+      AnimeBottMargin.value = 230;
+      AnimeDuration.value = 250;
     });
-    Future.delayed(const Duration(milliseconds: 5400), () {
+    await Future.delayed(const Duration(milliseconds: 5400), () {
       AnimeContHeight.value = 30;
       AnimeContWidth.value = 30;
       AnimeBottMargin.value = 2000;
+      AnimeDuration.value = 50;
     });
   }
 

@@ -47,7 +47,7 @@ class HomeView extends GetView<HomeController> {
                   curve: Curves.easeOut,
                   child: Image.asset(
                     'assets/images/bdflag.png',
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               ),
@@ -105,7 +105,7 @@ class CustomClipperRect extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
     // Define the visible area
-    return Rect.fromLTWH(0, 0, size.width, size.height - 175);
+    return Rect.fromLTWH(0, 0, size.width, size.height - 230);
   }
 
   @override
