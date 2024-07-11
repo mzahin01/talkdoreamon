@@ -19,7 +19,7 @@ class HomeController extends GetxController {
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
       artboard,
-      'DoraCake',
+      'Usual',
     );
     if (controller != null) {
       artboard.addController(controller);

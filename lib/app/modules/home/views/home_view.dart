@@ -22,8 +22,8 @@ class HomeView extends GetView<HomeController> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 75.0),
                 child: SizedBox(
-                  width: 350,
-                  height: 350,
+                  width: 600,
+                  height: 550,
                   child: RiveAnimation.asset(
                     'assets/rive/copybilai.riv',
                     fit: BoxFit.contain,
@@ -53,23 +53,23 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             Align(
-              alignment: Alignment.topCenter,
+              alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 100.0),
+                padding: const EdgeInsets.only(bottom: 50.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: controller.triggerEat,
-                      child: const Text('EatDora'),
+                      child: const Text('Eat'),
                     ),
                     ElevatedButton(
                       onPressed: controller.triggerThought,
-                      child: const Text('Thought'),
+                      child: const Text('Tht'),
                     ),
                     ElevatedButton(
                       onPressed: controller.triggerHiDoremon,
-                      child: const Text('HiDoremon'),
+                      child: const Text('HiD'),
                     ),
                   ],
                 ),
@@ -84,15 +84,15 @@ class HomeView extends GetView<HomeController> {
                   children: [
                     ElevatedButton(
                       onPressed: controller.triggerSpeak,
-                      child: const Text('Speak'),
+                      child: const Text('Talk'),
                     ),
                     ElevatedButton(
                       onPressed: controller.triggerSAndO,
-                      child: const Text('S&O'),
+                      child: const Text('Gad'),
                     ),
                     ElevatedButton(
                       onPressed: controller.triggerSunnahSmile,
-                      child: const Text('Smile'),
+                      child: const Text('Haha'),
                     ),
                   ],
                 ),
