@@ -24,4 +24,5 @@ flutter:
   assets:
     - assets/images/
     - assets/rive/
+    - assets/svgs/
 
