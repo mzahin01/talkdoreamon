@@ -15,6 +15,11 @@ class HomeController extends GetxController {
   SMIInput<bool>? _hiDoremonInput;
   SMIInput<bool>? _sunnahSmileInput;
   SMIInput<bool>? _doracake;
+  SMIInput<bool>? _hellCandy;
+  SMIInput<bool>? _iceCream;
+  SMIInput<bool>? _chicken;
+  SMIInput<bool>? _strawberry;
+  SMIInput<bool>? _redApple;
 
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
@@ -29,6 +34,11 @@ class HomeController extends GetxController {
       _hiDoremonInput = controller.findInput<bool>('HiDoremon');
       _sunnahSmileInput = controller.findInput<bool>('SunnahSmile');
       _doracake = controller.findInput<bool>('DoraCake');
+      _chicken = controller.findInput<bool>('Chicken');
+      _strawberry = controller.findInput<bool>('Strawberry');
+      _redApple = controller.findInput<bool>('RedApple');
+      _hellCandy = controller.findInput<bool>('HellCandy');
+      _iceCream = controller.findInput<bool>('IceCream');
     }
   }
 
@@ -74,7 +84,27 @@ class HomeController extends GetxController {
     _sunnahSmileInput!.value = true;
   }
 
-  void Eat() {
+  void Doracake() {
     _doracake!.value = true;
+  }
+
+  void IceCream() {
+    _iceCream!.value = true;
+  }
+
+  void Chicken() {
+    _chicken!.value = true;
+  }
+
+  void Strawberry() {
+    _strawberry!.value = true;
+  }
+
+  void HellCandy() {
+    _hellCandy!.value = true;
+  }
+
+  void RedApple() {
+    _redApple!.value = true;
   }
 }

@@ -65,12 +65,43 @@ class HomeView extends GetView<HomeController> {
                       child: const Text('Tht'),
                     ),
                     ElevatedButton(
-                      onPressed: controller.Eat,
-                      child: const Text('Eat'),
-                    ),
-                    ElevatedButton(
                       onPressed: controller.triggerHiDoremon,
                       child: const Text('HiD'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 500.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: controller.Doracake,
+                      child: const Text('Doracake'),
+                    ),
+                    InkWell(
+                      onTap: controller.IceCream,
+                      child: const Text('IceCream'),
+                    ),
+                    InkWell(
+                      onTap: controller.Chicken,
+                      child: const Text('Chicken'),
+                    ),
+                    InkWell(
+                      onTap: controller.Strawberry,
+                      child: const Text('Strawberry'),
+                    ),
+                    InkWell(
+                      onTap: controller.HellCandy,
+                      child: const Text('HellCandy'),
+                    ),
+                    InkWell(
+                      onTap: controller.RedApple,
+                      child: const Text('RedApple'),
                     ),
                   ],
                 ),
