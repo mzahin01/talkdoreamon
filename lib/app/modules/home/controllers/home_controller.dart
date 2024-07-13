@@ -14,6 +14,7 @@ class HomeController extends GetxController {
   SMIInput<bool>? _thoughtInput;
   SMIInput<bool>? _hiDoremonInput;
   SMIInput<bool>? _sunnahSmileInput;
+  SMIInput<bool>? _doracake;
 
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
@@ -27,6 +28,7 @@ class HomeController extends GetxController {
       _thoughtInput = controller.findInput<bool>('Thought');
       _hiDoremonInput = controller.findInput<bool>('HiDoremon');
       _sunnahSmileInput = controller.findInput<bool>('SunnahSmile');
+      _doracake = controller.findInput<bool>('DoraCake');
     }
   }
 
@@ -70,5 +72,9 @@ class HomeController extends GetxController {
 
   void triggerSunnahSmile() {
     _sunnahSmileInput!.value = true;
+  }
+
+  void Eat() {
+    _doracake!.value = true;
   }
 }

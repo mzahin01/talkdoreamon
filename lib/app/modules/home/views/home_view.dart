@@ -28,6 +28,7 @@ class HomeView extends GetView<HomeController> {
                     'assets/rive/copybilai.riv',
                     fit: BoxFit.contain,
                     onInit: controller.onRiveInit,
+                    // stateMachines: [],
                   ),
                 ),
               ),
@@ -62,6 +63,10 @@ class HomeView extends GetView<HomeController> {
                     ElevatedButton(
                       onPressed: controller.triggerThought,
                       child: const Text('Tht'),
+                    ),
+                    ElevatedButton(
+                      onPressed: controller.Eat,
+                      child: const Text('Eat'),
                     ),
                     ElevatedButton(
                       onPressed: controller.triggerHiDoremon,
