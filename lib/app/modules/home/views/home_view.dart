@@ -79,29 +79,29 @@ class HomeView extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: controller.Doracake,
-                      child: const Text('Doracake'),
+                    riveIconCont(
+                      'assets/rive/Dora.riv',
+                      controller.Doracake,
                     ),
-                    InkWell(
-                      onTap: controller.IceCream,
-                      child: const Text('IceCream'),
+                    riveIconCont(
+                      'assets/rive/Ice.riv',
+                      controller.IceCream,
                     ),
-                    InkWell(
-                      onTap: controller.Chicken,
-                      child: const Text('Chicken'),
+                    riveIconCont(
+                      'assets/rive/Chics.riv',
+                      controller.Chicken,
                     ),
-                    InkWell(
-                      onTap: controller.Strawberry,
-                      child: const Text('Strawberry'),
+                    riveIconCont(
+                      'assets/rive/Straw.riv',
+                      controller.Strawberry,
                     ),
-                    InkWell(
-                      onTap: controller.HellCandy,
-                      child: const Text('HellCandy'),
+                    riveIconCont(
+                      'assets/rive/HellCandy.riv',
+                      controller.HellCandy,
                     ),
-                    InkWell(
-                      onTap: controller.RedApple,
-                      child: const Text('RedApple'),
+                    riveIconCont(
+                      'assets/rive/Apple.riv',
+                      controller.RedApple,
                     ),
                   ],
                 ),
@@ -134,6 +134,22 @@ class HomeView extends GetView<HomeController> {
         ),
       );
     });
+  }
+
+  Widget riveIconCont(String assetPath, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        width: 50,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.black),
+        ),
+        child: RiveAnimation.asset(assetPath),
+      ),
+    );
   }
 }
 
