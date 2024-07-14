@@ -100,7 +100,7 @@ class HomeView extends GetView<HomeController> {
                       controller.HellCandy,
                     ),
                     riveIconCont(
-                      'assets/rive/Apple.riv',
+                      'assets/rive/apple.riv',
                       controller.RedApple,
                     ),
                   ],
