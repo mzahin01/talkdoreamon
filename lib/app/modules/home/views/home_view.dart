@@ -75,7 +75,7 @@ class HomeView extends GetView<HomeController> {
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 500.0),
+                padding: const EdgeInsets.only(top: 50.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -88,7 +88,7 @@ class HomeView extends GetView<HomeController> {
                       controller.IceCream,
                     ),
                     riveIconCont(
-                      'assets/rive/Chics.riv',
+                      'assets/rive/Chiks.riv',
                       controller.Chicken,
                     ),
                     riveIconCont(
@@ -96,7 +96,7 @@ class HomeView extends GetView<HomeController> {
                       controller.Strawberry,
                     ),
                     riveIconCont(
-                      'assets/rive/HellCandy.riv',
+                      'assets/rive/Candy.riv',
                       controller.HellCandy,
                     ),
                     riveIconCont(
