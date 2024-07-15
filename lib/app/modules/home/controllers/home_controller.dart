@@ -59,8 +59,8 @@ class HomeController extends GetxController {
       triggerThought();
     });
     await Future.delayed(const Duration(milliseconds: 700), () {
-      AnimeContHeight.value = 200;
-      AnimeContWidth.value = 275;
+      AnimeContHeight.value = 600;
+      AnimeContWidth.value = 300;
       AnimeBottMargin.value = 250;
       AnimeDuration.value = 250;
     });

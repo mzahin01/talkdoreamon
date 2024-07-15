@@ -47,7 +47,7 @@ class HomeView extends GetView<HomeController> {
                       Duration(milliseconds: controller.AnimeDuration.value),
                   curve: Curves.easeOut,
                   child: Image.asset(
-                    'assets/images/bdflag.png',
+                    'assets/images/door.png',
                     fit: BoxFit.fitHeight,
                   ),
                 ),
@@ -140,12 +140,13 @@ class HomeView extends GetView<HomeController> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 50,
-        width: 50,
+        height: 60,
+        width: 60,
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.black),
+          color: Colors.black.withOpacity(.2),
+          // border: Border.all(color: Colors.black),
         ),
         child: RiveAnimation.asset(assetPath),
       ),
