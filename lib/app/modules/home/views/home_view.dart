@@ -33,26 +33,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-            ClipRect(
-              clipper: CustomClipperRect(),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: AnimatedContainer(
-                  margin:
-                      EdgeInsets.only(bottom: controller.AnimeBottMargin.value),
-                  height: controller.AnimeContHeight.value,
-                  width: controller.AnimeContWidth.value,
-                  color: Colors.transparent,
-                  duration:
-                      Duration(milliseconds: controller.AnimeDuration.value),
-                  curve: Curves.easeOut,
-                  child: Image.asset(
-                    'assets/images/door.png',
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-              ),
-            ),
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
@@ -70,6 +50,19 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100.0),
+                child: GestureDetector(
+                    onTap: () {},
+                    child: const SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: RiveAnimation.asset('assets/rive/food.riv'),
+                    )),
               ),
             ),
             Align(
@@ -127,6 +120,26 @@ class HomeView extends GetView<HomeController> {
                       child: const Text('Haha'),
                     ),
                   ],
+                ),
+              ),
+            ),
+            ClipRect(
+              clipper: CustomClipperRect(),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: AnimatedContainer(
+                  margin:
+                      EdgeInsets.only(bottom: controller.AnimeBottMargin.value),
+                  height: controller.AnimeContHeight.value,
+                  width: controller.AnimeContWidth.value,
+                  color: Colors.transparent,
+                  duration:
+                      Duration(milliseconds: controller.AnimeDuration.value),
+                  curve: Curves.easeOut,
+                  child: Image.asset(
+                    'assets/images/door.png',
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
             ),
