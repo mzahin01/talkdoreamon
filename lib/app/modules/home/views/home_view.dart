@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:talkdoraemon/app/routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -107,6 +108,12 @@ class HomeView extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.TEST_PAGE);
+                      },
+                      child: const Text('gotoRaf'),
+                    ),
                     ElevatedButton(
                       onPressed: controller.triggerSpeak,
                       child: const Text('Talk'),

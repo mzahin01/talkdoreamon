@@ -6,9 +6,11 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
+  static const TEST_PAGE = _Paths.TEST_PAGE;
 }
 
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
+  static const TEST_PAGE = '/test-page';
 }
