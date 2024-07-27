@@ -37,7 +37,7 @@ class HomeView extends GetView<HomeController> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 50.0),
+                padding: const EdgeInsets.only(bottom: 70.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -48,6 +48,12 @@ class HomeView extends GetView<HomeController> {
                     ElevatedButton(
                       onPressed: controller.triggerHiDoremon,
                       child: const Text('HiD'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.TEST_PAGE);
+                      },
+                      child: const Text('gotoRaf'),
                     ),
                   ],
                 ),
@@ -109,12 +115,6 @@ class HomeView extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.TEST_PAGE);
-                      },
-                      child: const Text('gotoRaf'),
-                    ),
-                    ElevatedButton(
                       onPressed: controller.triggerSpeak,
                       child: const Text('Talk'),
                     ),
@@ -125,6 +125,12 @@ class HomeView extends GetView<HomeController> {
                     ElevatedButton(
                       onPressed: controller.triggerSunnahSmile,
                       child: const Text('Haha'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.record();
+                      },
+                      child: const Text('rec'),
                     ),
                   ],
                 ),

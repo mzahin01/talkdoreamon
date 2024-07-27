@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../controllers/test_page_controller.dart';
 
 class TestPageView extends GetView<TestPageController> {
-  const TestPageView({Key? key}) : super(key: key);
+  const TestPageView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

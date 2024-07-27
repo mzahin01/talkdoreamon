@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
 
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
@@ -20,6 +21,21 @@ class HomeController extends GetxController {
   SMIInput<bool>? _chicken;
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
+
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+  }
+
+  Future<void> record() async {
+    await _recorder.startRecorder(
+        toFile:
+            '/Volumes/code/delete/cope/hope/Testing/landf/talkdoraemon/assets/svgs');
+    await Future.delayed(const Duration(seconds: 5));
+    await _recorder.stopRecorder();
+  }
 
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
