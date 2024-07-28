@@ -10,6 +10,19 @@ class HomeController extends GetxController {
   RxDouble AnimeBottMargin = 170.0.obs;
   RxInt AnimeDuration = 300.obs;
 
+// Variable Declarations
+  SMIInput<bool>? _flyInput;
+  SMIInput<bool>? _travelInput;
+  SMIInput<bool>? _chillinInput;
+  SMIInput<bool>? _listenToggleInput;
+  SMIInput<bool>? _noEatInput;
+  SMIInput<bool>? _eatInput;
+  SMIInput<bool>? _rightLegPunchInput;
+  SMIInput<bool>? _leftLegPunchInput;
+  SMIInput<bool>? _headPunchInput;
+  SMIInput<bool>? _trunkPunchInput;
+  SMIInput<bool>? _rightHandPunchInput;
+  SMIInput<bool>? _leftHandPunchInput;
   SMIInput<bool>? _speakInput;
   SMIInput<bool>? _sAndOInput;
   SMIInput<bool>? _thoughtInput;
@@ -47,7 +60,7 @@ class HomeController extends GetxController {
       _speakInput = controller.findInput<bool>('Speak');
       _sAndOInput = controller.findInput<bool>('S&O');
       _thoughtInput = controller.findInput<bool>('Thought');
-      _hiDoremonInput = controller.findInput<bool>('HiDoremon');
+      _hiDoremonInput = controller.findInput<bool>('Hi');
       _sunnahSmileInput = controller.findInput<bool>('SunnahSmile');
       _doracake = controller.findInput<bool>('DoraCake');
       _chicken = controller.findInput<bool>('Chicken');
@@ -55,6 +68,18 @@ class HomeController extends GetxController {
       _redApple = controller.findInput<bool>('RedApple');
       _hellCandy = controller.findInput<bool>('HellCandy');
       _iceCream = controller.findInput<bool>('IceCream');
+      _flyInput = controller.findInput<bool>('Fly');
+      _travelInput = controller.findInput<bool>('Travel');
+      _chillinInput = controller.findInput<bool>('Chillin');
+      _listenToggleInput = controller.findInput<bool>('ListenToggle');
+      _noEatInput = controller.findInput<bool>('NoEat');
+      _eatInput = controller.findInput<bool>('Eat');
+      _rightLegPunchInput = controller.findInput<bool>('RightLegPunch');
+      _leftLegPunchInput = controller.findInput<bool>('LeftLegPunch');
+      _headPunchInput = controller.findInput<bool>('HeadPunch');
+      _trunkPunchInput = controller.findInput<bool>('TrunkPunch');
+      _rightHandPunchInput = controller.findInput<bool>('RightHandPunch');
+      _leftHandPunchInput = controller.findInput<bool>('LeftHandPunch');
     }
   }
 
@@ -86,6 +111,55 @@ class HomeController extends GetxController {
       AnimeBottMargin.value = 2000;
       AnimeDuration.value = 300;
     });
+  }
+
+// Trigger Functions
+  void triggerFly() {
+    _flyInput!.value = true;
+  }
+
+  void triggerTravel() {
+    _travelInput!.value = true;
+  }
+
+  void triggerChillin() {
+    _chillinInput!.value = true;
+  }
+
+  void triggerListenToggle() {
+    _listenToggleInput!.value = true;
+  }
+
+  void triggerNoEat() {
+    _noEatInput!.value = true;
+  }
+
+  void triggerEat() {
+    _eatInput!.value = true;
+  }
+
+  void triggerRightLegPunch() {
+    _rightLegPunchInput!.value = true;
+  }
+
+  void triggerLeftLegPunch() {
+    _leftLegPunchInput!.value = true;
+  }
+
+  void triggerHeadPunch() {
+    _headPunchInput!.value = true;
+  }
+
+  void triggerTrunkPunch() {
+    _trunkPunchInput!.value = true;
+  }
+
+  void triggerRightHandPunch() {
+    _rightHandPunchInput!.value = true;
+  }
+
+  void triggerLeftHandPunch() {
+    _leftHandPunchInput!.value = true;
   }
 
   void triggerThought() {
