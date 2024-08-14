@@ -59,14 +59,14 @@ class AllButtons extends StatelessWidget {
                 child: const Text('Gad'),
               ),
               ElevatedButton(
-                onPressed: controller.triggerSunnahSmile,
-                child: const Text('Haha'),
+                onPressed: controller.triggerFly,
+                child: const Text('fly'),
               ),
               ElevatedButton(
                 onPressed: () {
-                  controller.record();
+                  controller.triggerTravel();
                 },
-                child: const Text('rec'),
+                child: const Text('Travel'),
               ),
             ],
           ),

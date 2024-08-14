@@ -68,7 +68,7 @@ class HomeController extends GetxController {
       _redApple = controller.findInput<bool>('RedApple');
       _hellCandy = controller.findInput<bool>('HellCandy');
       _iceCream = controller.findInput<bool>('IceCream');
-      _flyInput = controller.findInput<bool>('Fly');
+      _flyInput = controller.findInput<bool>('fly');
       _travelInput = controller.findInput<bool>('Travel');
       _chillinInput = controller.findInput<bool>('Chillin');
       _listenToggleInput = controller.findInput<bool>('ListenToggle');
