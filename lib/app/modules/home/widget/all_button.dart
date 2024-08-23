@@ -21,27 +21,27 @@ class AllButtons extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              riveIconCont(
+              foodIcons(
                 'assets/rive/Dora.riv',
                 controller.Doracake,
               ),
-              riveIconCont(
+              foodIcons(
                 'assets/rive/Ice.riv',
                 controller.IceCream,
               ),
-              riveIconCont(
+              foodIcons(
                 'assets/rive/Chiks.riv',
                 controller.Chicken,
               ),
-              riveIconCont(
+              foodIcons(
                 'assets/rive/Straw.riv',
                 controller.Strawberry,
               ),
-              riveIconCont(
+              foodIcons(
                 'assets/rive/Candy.riv',
                 controller.HellCandy,
               ),
-              riveIconCont(
+              foodIcons(
                 'assets/rive/apple.riv',
                 controller.RedApple,
               ),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import '../controllers/home_controller.dart';
 
-// below is Doraemon
-
 class Doremon extends StatelessWidget {
   const Doremon({
     super.key,
@@ -26,24 +24,6 @@ class Doremon extends StatelessWidget {
           onInit: controller.onRiveInit,
           // stateMachines: [],
         ),
-      ),
-    );
-  }
-}
-
-// below is the background image
-
-class BackgroundImage extends StatelessWidget {
-  const BackgroundImage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Image.asset(
-        'assets/images/back.png',
-        fit: BoxFit.fitHeight,
       ),
     );
   }

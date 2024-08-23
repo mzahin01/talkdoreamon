@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talkdoraemon/app/modules/home/widget/all_button.dart';
-import 'package:talkdoraemon/app/modules/home/widget/foods.dart';
 import '../controllers/home_controller.dart';
-import '../widget/doremon_and_bg.dart';
+import '../widget/all_button.dart';
+import '../widget/backgroun_pic.dart';
+import '../widget/doremon.dart';
+import '../widget/foods.dart';
 import '../widget/gadgets.dart';
 
 class HomeView extends GetView<HomeController> {

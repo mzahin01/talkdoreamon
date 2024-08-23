@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-Widget riveIconCont(String assetPath, VoidCallback onTap) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
+Widget foodIcons(String assetPath, VoidCallback onTap) {
+  return IconButton(
+    onPressed: onTap,
+    padding: EdgeInsets.zero,
+    icon: Container(
       height: 60,
       width: 60,
       padding: const EdgeInsets.all(8.0),
