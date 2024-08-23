@@ -12,7 +12,7 @@ Widget foodIcons(String assetPath, VoidCallback onTap) {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.black.withOpacity(.2),
-        // border: Border.all(color: Colors.black),
+        border: Border.all(color: Colors.black),
       ),
       child: RiveAnimation.asset(assetPath),
     ),

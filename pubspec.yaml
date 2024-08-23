@@ -23,10 +23,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    # - assets/images/
     - assets/images/bg/
-    - assets/images/widget/
-    - assets/rive/
+    - assets/images/gadgets/
+    # - assets/rive/
     - assets/rive/foods/
+    - assets/rive/doraemon/
     # - assets/svgs/
 

@@ -14,12 +14,12 @@ class Doremon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        margin: const EdgeInsets.only(top: 120),
+      child: SizedBox(
+        // margin: const EdgeInsets.only(top: 120),
         width: 700,
         height: 1250,
         child: RiveAnimation.asset(
-          'assets/rive/copybilai.riv',
+          'assets/rive/doraemon/doraemon.riv',
           fit: BoxFit.fitWidth,
           onInit: controller.onRiveInit,
           // stateMachines: [],

@@ -17,7 +17,7 @@ class Foods extends StatelessWidget {
             child: const SizedBox(
               height: 150,
               width: 150,
-              child: RiveAnimation.asset('assets/rive/food.riv'),
+              child: RiveAnimation.asset('assets/rive/foods/AllFood.riv'),
             )),
       ),
     );

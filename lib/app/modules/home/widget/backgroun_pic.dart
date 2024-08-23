@@ -7,10 +7,11 @@ class BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
+    return Align(
+      alignment: Alignment.bottomCenter,
       child: Image.asset(
-        'assets/images/back.png',
-        fit: BoxFit.fitHeight,
+        'assets/images/bg/bg6.jpg',
+        fit: BoxFit.fitWidth,
       ),
     );
   }

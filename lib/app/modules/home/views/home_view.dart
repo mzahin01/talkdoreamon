@@ -15,10 +15,16 @@ class HomeView extends GetView<HomeController> {
       body: Stack(
         children: [
           const BackgroundImage(),
-          Doremon(controller: controller),
-          const Foods(),
-          AllButtons(controller: controller),
-          Gadgets(controller: controller),
+          SafeArea(
+            child: Stack(
+              children: [
+                Doremon(controller: controller),
+                const Foods(),
+                AllButtons(controller: controller),
+                Gadgets(controller: controller),
+              ],
+            ),
+          ),
         ],
       ),
     );

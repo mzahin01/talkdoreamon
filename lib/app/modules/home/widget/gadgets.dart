@@ -26,7 +26,7 @@ class Gadgets extends StatelessWidget {
             duration: Duration(milliseconds: controller.AnimeDuration.value),
             curve: Curves.easeOut,
             child: Image.asset(
-              'assets/images/bdflag.png',
+              'assets/images/gadgets/bdflag.png',
               fit: BoxFit.fitWidth,
             ),
           ),
