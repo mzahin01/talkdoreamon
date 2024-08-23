@@ -4,7 +4,6 @@ import '../controllers/home_controller.dart';
 import '../widget/all_button.dart';
 import '../widget/backgroun_pic.dart';
 import '../widget/doremon.dart';
-import '../widget/foods.dart';
 import '../widget/gadgets.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -14,12 +13,13 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       body: Stack(
         children: [
-          const BackgroundImage(),
+          const BackgroundImage(
+            image: 'assets/images/bg/bg6.jpg',
+          ),
           SafeArea(
             child: Stack(
               children: [
                 Doremon(controller: controller),
-                const Foods(),
                 AllButtons(controller: controller),
                 Gadgets(controller: controller),
               ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:talkdoraemon/app/modules/home/widget/foods.dart';
 import '../controllers/home_controller.dart';
 
 class Doremon extends StatelessWidget {
@@ -15,14 +17,17 @@ class Doremon extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        // margin: const EdgeInsets.only(top: 120),
-        width: 700,
-        height: 1250,
-        child: RiveAnimation.asset(
-          'assets/rive/doraemon/doraemon.riv',
-          fit: BoxFit.fitWidth,
-          onInit: controller.onRiveInit,
-          // stateMachines: [],
+        width: Get.width,
+        height: Get.width * (1250 / 700),
+        child: Stack(
+          children: [
+            RiveAnimation.asset(
+              'assets/rive/doraemon/doraemon.riv',
+              fit: BoxFit.fitWidth,
+              onInit: controller.onRiveInit,
+            ),
+            const Foods(),
+          ],
         ),
       ),
     );

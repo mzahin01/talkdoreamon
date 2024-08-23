@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
 class Foods extends StatelessWidget {
@@ -11,12 +12,16 @@ class Foods extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 45, left: 15),
-        child: GestureDetector(
-            onTap: () {},
-            child: const SizedBox(
-              height: 150,
-              width: 150,
+        padding: EdgeInsets.only(
+          bottom: Get.width / 30,
+          left: Get.width / 30,
+        ),
+        child: IconButton(
+            onPressed: () {},
+            padding: EdgeInsets.zero,
+            icon: const SizedBox(
+              height: 130,
+              width: 130,
               child: RiveAnimation.asset('assets/rive/foods/AllFood.riv'),
             )),
       ),

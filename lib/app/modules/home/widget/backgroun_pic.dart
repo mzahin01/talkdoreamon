@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({
     super.key,
+    required this.image,
   });
+  final String image;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
+    return Positioned.fill(
       child: Image.asset(
-        'assets/images/bg/bg6.jpg',
-        fit: BoxFit.fitWidth,
+        image,
+        fit: BoxFit.cover, // or BoxFit.fill
       ),
     );
   }
