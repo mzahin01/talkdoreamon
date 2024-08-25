@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomClipperRect extends CustomClipper<Rect> {
+class GadgetRect extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
     // Define the visible area

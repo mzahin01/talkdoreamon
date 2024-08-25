@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/modules/home/widget/foods.dart';
+import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 import '../controllers/home_controller.dart';
 
 class Doremon extends StatelessWidget {
@@ -22,7 +23,7 @@ class Doremon extends StatelessWidget {
         child: Stack(
           children: [
             RiveAnimation.asset(
-              'assets/rive/doraemon/doraemon.riv',
+              LottieAsset.doraemon,
               fit: BoxFit.fitWidth,
               onInit: controller.onRiveInit,
             ),

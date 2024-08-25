@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
 import 'package:talkdoraemon/app/modules/home/widget/widget.dart';
 import 'package:talkdoraemon/app/routes/app_pages.dart';
+import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 
 class AllButtons extends StatelessWidget {
   const AllButtons({
@@ -20,27 +21,27 @@ class AllButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             foodIcons(
-              'assets/rive/foods/Dora.riv',
+              LottieAsset.doraCake,
               controller.Doracake,
             ),
             foodIcons(
-              'assets/rive/foods/Ice.riv',
+              LottieAsset.iceCream,
               controller.IceCream,
             ),
             foodIcons(
-              'assets/rive/foods/Chiks.riv',
+              LottieAsset.chicken,
               controller.Chicken,
             ),
             foodIcons(
-              'assets/rive/foods/Straw.riv',
+              LottieAsset.strawberry,
               controller.Strawberry,
             ),
             foodIcons(
-              'assets/rive/foods/Candy.riv',
+              LottieAsset.candy,
               controller.HellCandy,
             ),
             foodIcons(
-              'assets/rive/foods/apple.riv',
+              LottieAsset.apple,
               controller.RedApple,
             ),
           ],

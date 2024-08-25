@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
 import 'package:talkdoraemon/app/modules/home/widget/rect.dart';
+import 'package:talkdoraemon/app/shared/const/image_asset.dart';
 
 class Gadgets extends StatelessWidget {
   const Gadgets({
@@ -15,7 +16,7 @@ class Gadgets extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return ClipRect(
-        clipper: CustomClipperRect(),
+        clipper: GadgetRect(),
         child: Align(
           alignment: Alignment.bottomCenter,
           child: AnimatedContainer(
@@ -26,7 +27,7 @@ class Gadgets extends StatelessWidget {
             duration: Duration(milliseconds: controller.AnimeDuration.value),
             curve: Curves.easeOut,
             child: Image.asset(
-              'assets/images/gadgets/bdflag.png',
+              ImageAsset.anywhereDoor,
               fit: BoxFit.fitWidth,
             ),
           ),

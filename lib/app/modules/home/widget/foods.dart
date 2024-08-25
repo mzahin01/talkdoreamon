@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 
 class Foods extends StatelessWidget {
   const Foods({
@@ -22,7 +23,9 @@ class Foods extends StatelessWidget {
             icon: const SizedBox(
               height: 130,
               width: 130,
-              child: RiveAnimation.asset('assets/rive/foods/AllFood.riv'),
+              child: RiveAnimation.asset(
+                LottieAsset.allFood,
+              ),
             )),
       ),
     );

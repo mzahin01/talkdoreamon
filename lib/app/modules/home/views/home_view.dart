@@ -13,9 +13,7 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       body: Stack(
         children: [
-          const BackgroundImage(
-            image: 'assets/images/bg/bg6.jpg',
-          ),
+          const BackgroundImage(),
           SafeArea(
             child: Stack(
               children: [
