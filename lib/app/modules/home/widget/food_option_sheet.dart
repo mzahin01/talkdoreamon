@@ -30,7 +30,7 @@ class FoodOptionSheet extends StatelessWidget {
               duration: Duration(milliseconds: controller.foodDuration.value),
               curve: Curves.easeOut,
               child: Image.asset(
-                ImageAsset.bangladeshFlag,
+                ImageAsset.bangladeshFlag, // Assuming CIA alias is used here
                 fit: BoxFit.fitWidth,
               ),
             ),

@@ -4,7 +4,6 @@ import 'package:talkdoraemon/app/modules/home/widget/food_option_sheet.dart';
 import 'package:talkdoraemon/app/modules/home/widget/all_front_button.dart';
 import '../controllers/home_controller.dart';
 import '../widget/all_button.dart';
-import '../widget/backgroun_pic.dart';
 import '../widget/carousal.dart';
 import '../widget/doremon.dart';
 import '../widget/gadgets.dart';

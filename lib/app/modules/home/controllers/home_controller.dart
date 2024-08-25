@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
-
-import 'package:flutter_sound/flutter_sound.dart';
+// import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -69,15 +68,15 @@ class HomeController extends GetxController {
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
 
-  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  // final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
 
-  Future<void> record() async {
-    await _recorder.startRecorder(
-        toFile:
-            '/Volumes/code/delete/cope/hope/Testing/landf/talkdoraemon/assets/svgs');
-    await Future.delayed(const Duration(seconds: 5));
-    await _recorder.stopRecorder();
-  }
+  // Future<void> record() async {
+  //   await _recorder.startRecorder(
+  //       toFile:
+  //           '/Volumes/code/delete/cope/hope/Testing/landf/talkdoraemon/assets/svgs');
+  //   await Future.delayed(const Duration(seconds: 5));
+  //   await _recorder.stopRecorder();
+  // }
 
   void onRiveInit(Artboard artboard) {
     final controller = StateMachineController.fromArtboard(
@@ -164,12 +163,36 @@ class HomeController extends GetxController {
   }
 
 // Trigger Functions
-  void triggerFly() {
+  bool animating = false;
+
+  Future<void> triggerFly() async {
+    if (animating) {
+      return;
+    }
+    animating = true;
     _flyInput!.value = true;
+    await Future.delayed(const Duration(milliseconds: 3000), () {
+      back();
+    });
+    await Future.delayed(const Duration(milliseconds: 200), () {
+      _flyInput!.value = true;
+    });
+    animating = false;
   }
 
-  void triggerTravel() {
-    _travelInput!.value = true;
+  Future<void> triggerTravel() async {
+    if (animating) {
+      return;
+    }
+    animating = true;
+    triggerSAndO();
+    await Future.delayed(const Duration(milliseconds: 4500), () {
+      _travelInput!.value = true;
+    });
+    await Future.delayed(const Duration(milliseconds: 700), () {
+      next();
+    });
+    animating = false;
   }
 
   void triggerChillin() {

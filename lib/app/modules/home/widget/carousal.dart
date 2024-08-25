@@ -20,9 +20,9 @@ class CarouselWidget extends StatelessWidget {
         itemCount: controller.bgList.length,
         itemExtent: Get.width,
         center: true,
-        anchor: 3,
+        anchor: 1,
         controller: controller.scrollController,
-        velocityFactor: 1,
+        velocityFactor: .3,
         loop: true,
         itemBuilder: (context, itemIndex, realIndex) {
           return Image.asset(
