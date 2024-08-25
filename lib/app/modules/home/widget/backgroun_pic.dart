@@ -10,7 +10,7 @@ class BackgroundImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Image.asset(
-        ImageAsset.background6,
+        ImageAsset.background0,
         fit: BoxFit.cover, // or BoxFit.fill
       ),
     );

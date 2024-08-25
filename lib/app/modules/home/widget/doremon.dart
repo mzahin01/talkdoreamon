@@ -27,7 +27,9 @@ class Doremon extends StatelessWidget {
               fit: BoxFit.fitWidth,
               onInit: controller.onRiveInit,
             ),
-            const Foods(),
+            // Here is AllFood icon
+            Foods(controller: controller),
+            // CopterButton(controller: controller),
           ],
         ),
       ),

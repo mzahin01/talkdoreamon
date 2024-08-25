@@ -17,7 +17,7 @@ class FoodRack extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
     // Define the visible area
-    return Rect.fromLTWH(0, 0, size.width, size.height - 230);
+    return Rect.fromLTWH(0, 0, size.width - 300, size.height - 300);
   }
 
   @override

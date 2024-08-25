@@ -14,5 +14,9 @@ class ImageAsset {
   static const String bangladeshFlag = 'assets/images/gadgets/bdflag.png';
   static const String anywhereDoor = 'assets/images/gadgets/door.png';
 
+// Button images
+  static const String doorButton = 'assets/images/anywhereDoor.png';
+  static const String copterButton = 'assets/images/bambooCopter.png';
+
   ImageAsset._();
 }

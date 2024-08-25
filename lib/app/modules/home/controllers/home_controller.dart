@@ -2,13 +2,47 @@
 
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
+import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
+import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
 class HomeController extends GetxController {
+  List<String> bannerList = [
+    cia.ImageAsset.background0,
+    cia.ImageAsset.background1,
+    cia.ImageAsset.background2,
+    cia.ImageAsset.background3,
+    cia.ImageAsset.background4,
+    cia.ImageAsset.background5,
+    cia.ImageAsset.background6,
+  ];
+
+  late InfiniteScrollController scrollController;
+
+  // init function
+  @override
+  void onInit() {
+    super.onInit();
+    scrollController = InfiniteScrollController();
+  }
+
+  void next() {
+    scrollController.nextItem();
+  }
+
+  void back() {
+    scrollController.previousItem();
+  }
+
   RxDouble AnimeContHeight = 50.0.obs;
   RxDouble AnimeContWidth = 100.0.obs;
   RxDouble AnimeBottMargin = 170.0.obs;
   RxInt AnimeDuration = 300.obs;
+
+  RxDouble foodContHeight = 50.0.obs;
+  RxDouble foodContWidth = 100.0.obs;
+  RxDouble foodRightMargin = 170.0.obs;
+  RxInt foodDuration = 300.obs;
 
 // Variable Declarations
   SMIInput<bool>? _flyInput;
@@ -36,11 +70,6 @@ class HomeController extends GetxController {
   SMIInput<bool>? _redApple;
 
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-  }
 
   Future<void> record() async {
     await _recorder.startRecorder(
@@ -110,6 +139,27 @@ class HomeController extends GetxController {
       AnimeContWidth.value = 30;
       AnimeBottMargin.value = 2000;
       AnimeDuration.value = 300;
+    });
+  }
+
+  Future<void> triggerFoodAnimation() async {
+    foodContHeight.value = 100;
+    foodContWidth.value = 0;
+    foodRightMargin.value = 30;
+    foodDuration.value = 300;
+    _sAndOInput!.value = true;
+    await Future.delayed(const Duration(milliseconds: 2000), () {});
+    await Future.delayed(const Duration(milliseconds: 700), () {
+      foodContHeight.value = 600;
+      foodContWidth.value = 300;
+      foodRightMargin.value = 250;
+      foodDuration.value = 250;
+    });
+    await Future.delayed(const Duration(milliseconds: 2000), () {
+      foodContHeight.value = 100;
+      foodContWidth.value = Get.width * 2 / 3;
+      foodRightMargin.value = 30;
+      foodDuration.value = 300;
     });
   }
 

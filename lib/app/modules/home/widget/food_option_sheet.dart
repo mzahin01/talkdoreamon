@@ -22,15 +22,15 @@ class FoodOptionSheet extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
               margin: EdgeInsets.only(
-                bottom: controller.AnimeBottMargin.value,
-              ),
-              height: controller.AnimeContHeight.value,
-              width: controller.AnimeContWidth.value,
+                  right: controller.foodRightMargin.value,
+                  bottom: Get.width / 10),
+              height: Get.width / 5,
+              width: Get.width * 3 / 4,
               color: Colors.transparent,
-              duration: Duration(milliseconds: controller.AnimeDuration.value),
+              duration: Duration(milliseconds: controller.foodDuration.value),
               curve: Curves.easeOut,
               child: Image.asset(
-                ImageAsset.background0,
+                ImageAsset.bangladeshFlag,
                 fit: BoxFit.fitWidth,
               ),
             ),
