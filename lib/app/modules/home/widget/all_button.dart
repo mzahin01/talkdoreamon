@@ -63,11 +63,11 @@ class AllButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: controller.triggerThought,
+              onPressed: controller.next,
               child: const Text('Tht'),
             ),
             ElevatedButton(
-              onPressed: controller.triggerHiDoremon,
+              onPressed: controller.back,
               child: const Text('HiD'),
             ),
             ElevatedButton(

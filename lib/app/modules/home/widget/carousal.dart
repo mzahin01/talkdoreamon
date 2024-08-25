@@ -14,32 +14,20 @@ class CarouselWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
-      width: Get.width,
+      height: Get.height,
+      width: Get.width + 20,
       child: InfiniteCarousel.builder(
-        itemCount: controller.bannerList.length,
+        itemCount: controller.bgList.length,
         itemExtent: Get.width,
         center: true,
         anchor: 3,
         controller: controller.scrollController,
         velocityFactor: 1,
         loop: true,
-        // onIndexChanged: (index) {
-        //   print('Current Index: $index+2');
-        // },
         itemBuilder: (context, itemIndex, realIndex) {
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.asset(
-                controller.bannerList[itemIndex],
-                fit: BoxFit.fill,
-              ),
-            ),
+          return Image.asset(
+            controller.bgList[itemIndex],
+            fit: BoxFit.fill,
           );
         },
       ),

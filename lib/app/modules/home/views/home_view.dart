@@ -5,6 +5,7 @@ import 'package:talkdoraemon/app/modules/home/widget/all_front_button.dart';
 import '../controllers/home_controller.dart';
 import '../widget/all_button.dart';
 import '../widget/backgroun_pic.dart';
+import '../widget/carousal.dart';
 import '../widget/doremon.dart';
 import '../widget/gadgets.dart';
 
@@ -15,7 +16,8 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       body: Stack(
         children: [
-          const BackgroundImage(),
+          // const BackgroundImage(),
+          CarouselWidget(controller: controller),
           SafeArea(
             child: Stack(
               children: [

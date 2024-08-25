@@ -7,7 +7,7 @@ import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
 class HomeController extends GetxController {
-  List<String> bannerList = [
+  List<String> bgList = [
     cia.ImageAsset.background0,
     cia.ImageAsset.background1,
     cia.ImageAsset.background2,
