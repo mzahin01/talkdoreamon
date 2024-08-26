@@ -40,8 +40,31 @@ class HomeController extends GetxController {
 
   RxDouble foodContHeight = 50.0.obs;
   RxDouble foodContWidth = 100.0.obs;
-  RxDouble foodRightMargin = 170.0.obs;
+  RxDouble foodRightMargin = 10.0.obs;
   RxInt foodDuration = 300.obs;
+
+  // Track the state of the toggle
+  RxBool isFirstFunctionActive = true.obs;
+
+  // Define the function that toggles between two states
+  Future<void> triggerFoodAnimation() async {
+    if (isFirstFunctionActive.value) {
+      // Call the first function
+      foodContHeight.value = 100;
+      foodContWidth.value = Get.width * 2 / 3;
+      foodRightMargin.value = Get.width;
+      foodDuration.value = 250;
+    } else {
+      // Call the second function
+      foodContHeight.value = 100;
+      foodContWidth.value = Get.width * 2 / 3;
+      foodRightMargin.value = 30;
+      foodDuration.value = 300;
+    }
+
+    // Toggle the state for the next call
+    isFirstFunctionActive.value = !isFirstFunctionActive.value;
+  }
 
 // Variable Declarations
   SMIInput<bool>? _flyInput;
@@ -139,29 +162,6 @@ class HomeController extends GetxController {
       AnimeBottMargin.value = 2000;
       AnimeDuration.value = 300;
     });
-  }
-
-  // Track the state of the toggle
-  RxBool isFirstFunctionActive = true.obs;
-
-  // Define the function that toggles between two states
-  Future<void> triggerFoodAnimation() async {
-    if (isFirstFunctionActive.value) {
-      // Call the first function
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = Get.width;
-      foodDuration.value = 250;
-    } else {
-      // Call the second function
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = 30;
-      foodDuration.value = 300;
-    }
-
-    // Toggle the state for the next call
-    isFirstFunctionActive.value = !isFirstFunctionActive.value;
   }
 
 // Trigger Functions

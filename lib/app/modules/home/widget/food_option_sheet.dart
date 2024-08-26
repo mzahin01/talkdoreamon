@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
 import 'package:talkdoraemon/app/modules/home/widget/rect.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart';
+import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
+import 'package:talkdoraemon/app/styles/colors.dart';
+
+import 'widget.dart';
 
 class FoodOptionSheet extends StatelessWidget {
   const FoodOptionSheet({
@@ -26,12 +30,41 @@ class FoodOptionSheet extends StatelessWidget {
                   bottom: Get.width / 10),
               height: Get.width / 5,
               width: Get.width * 3 / 4,
-              color: Colors.transparent,
               duration: Duration(milliseconds: controller.foodDuration.value),
               curve: Curves.easeOut,
-              child: Image.asset(
-                ImageAsset.bangladeshFlag, // Assuming CIA alias is used here
-                fit: BoxFit.fitWidth,
+              decoration: BoxDecoration(
+                color: SGColors.blackShade3.withAlpha(100),
+                border: Border.all(color: SGColors.blackShade3),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  foodIcons(
+                    LottieAsset.doraCake,
+                    controller.Doracake,
+                  ),
+                  foodIcons(
+                    LottieAsset.iceCream,
+                    controller.IceCream,
+                  ),
+                  foodIcons(
+                    LottieAsset.chicken,
+                    controller.Chicken,
+                  ),
+                  foodIcons(
+                    LottieAsset.strawberry,
+                    controller.Strawberry,
+                  ),
+                  foodIcons(
+                    LottieAsset.candy,
+                    controller.HellCandy,
+                  ),
+                  foodIcons(
+                    LottieAsset.apple,
+                    controller.RedApple,
+                  ),
+                ],
               ),
             ),
           ),

@@ -29,7 +29,7 @@ class Doremon extends StatelessWidget {
               onInit: controller.onRiveInit,
             ),
             // Here is Food Sheet
-            FoodOptionSheet(controller: controller),
+            // FoodOptionSheet(controller: controller),
             // Here is AllFood icon
             Foods(controller: controller),
           ],
