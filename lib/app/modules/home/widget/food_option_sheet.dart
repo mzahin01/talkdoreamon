@@ -17,7 +17,7 @@ class FoodOptionSheet extends StatelessWidget {
     return Obx(
       () {
         return ClipRect(
-          clipper: FoodRack(),
+          clipper: FoodRect(),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(

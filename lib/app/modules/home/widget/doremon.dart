@@ -4,6 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/modules/home/widget/foods.dart';
 import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 import '../controllers/home_controller.dart';
+import 'food_option_sheet.dart';
 
 class Doremon extends StatelessWidget {
   const Doremon({
@@ -27,9 +28,10 @@ class Doremon extends StatelessWidget {
               fit: BoxFit.fitWidth,
               onInit: controller.onRiveInit,
             ),
+            // Here is Food Sheet
+            FoodOptionSheet(controller: controller),
             // Here is AllFood icon
             Foods(controller: controller),
-            // CopterButton(controller: controller),
           ],
         ),
       ),

@@ -13,14 +13,14 @@ class GadgetRect extends CustomClipper<Rect> {
   }
 }
 
-class FoodRack extends CustomClipper<Rect> {
+class FoodRect extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
-    // Calculate the middle point of the screen
-    double middleX = size.width / 2;
+    // Calculate the width of one-third of the screen
+    double X = size.width / 5;
 
-    // Define the visible area: only the right half is visible
-    return Rect.fromLTWH(middleX, 0, middleX, size.height);
+    // Define the visible area: clip the left one-third of the screen
+    return Rect.fromLTWH(X, 0, size.width - X, size.height);
   }
 
   @override

@@ -23,7 +23,6 @@ class HomeView extends GetView<HomeController> {
                 Doremon(controller: controller),
                 AllButtons(controller: controller),
                 Gadgets(controller: controller),
-                FoodOptionSheet(controller: controller),
                 CopterButton(controller: controller),
                 AnywhereTravelButton(controller: controller),
               ],

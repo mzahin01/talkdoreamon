@@ -141,25 +141,27 @@ class HomeController extends GetxController {
     });
   }
 
+  // Track the state of the toggle
+  RxBool isFirstFunctionActive = true.obs;
+
+  // Define the function that toggles between two states
   Future<void> triggerFoodAnimation() async {
-    foodContHeight.value = 100;
-    foodContWidth.value = 0;
-    foodRightMargin.value = 30;
-    foodDuration.value = 300;
-    _sAndOInput!.value = true;
-    await Future.delayed(const Duration(milliseconds: 2000), () {});
-    await Future.delayed(const Duration(milliseconds: 700), () {
-      foodContHeight.value = 600;
-      foodContWidth.value = 300;
-      foodRightMargin.value = 250;
+    if (isFirstFunctionActive.value) {
+      // Call the first function
+      foodContHeight.value = 100;
+      foodContWidth.value = Get.width * 2 / 3;
+      foodRightMargin.value = Get.width;
       foodDuration.value = 250;
-    });
-    await Future.delayed(const Duration(milliseconds: 2000), () {
+    } else {
+      // Call the second function
       foodContHeight.value = 100;
       foodContWidth.value = Get.width * 2 / 3;
       foodRightMargin.value = 30;
       foodDuration.value = 300;
-    });
+    }
+
+    // Toggle the state for the next call
+    isFirstFunctionActive.value = !isFirstFunctionActive.value;
   }
 
 // Trigger Functions
@@ -167,32 +169,46 @@ class HomeController extends GetxController {
 
   Future<void> triggerFly() async {
     if (animating) {
+      print('anime entering -');
+      print(animating);
       return;
+    } else {
+      print('anime IN -');
+      print(animating);
+      await Future.delayed(const Duration(milliseconds: 0), () {
+        animating = true;
+        _flyInput!.value = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 3000), () {
+        back();
+      });
+      await Future.delayed(const Duration(milliseconds: 200), () {
+        _flyInput!.value = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 2300), () {
+        animating = false;
+      });
     }
-    animating = true;
-    _flyInput!.value = true;
-    await Future.delayed(const Duration(milliseconds: 3000), () {
-      back();
-    });
-    await Future.delayed(const Duration(milliseconds: 200), () {
-      _flyInput!.value = true;
-    });
-    animating = false;
   }
 
   Future<void> triggerTravel() async {
     if (animating) {
       return;
+    } else {
+      await Future.delayed(const Duration(milliseconds: 0), () {
+        animating = true;
+        triggerSAndO();
+      });
+      await Future.delayed(const Duration(milliseconds: 4500), () {
+        _travelInput!.value = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 700), () {
+        next();
+      });
+      await Future.delayed(const Duration(milliseconds: 0), () {
+        animating = false;
+      });
     }
-    animating = true;
-    triggerSAndO();
-    await Future.delayed(const Duration(milliseconds: 4500), () {
-      _travelInput!.value = true;
-    });
-    await Future.delayed(const Duration(milliseconds: 700), () {
-      next();
-    });
-    animating = false;
   }
 
   void triggerChillin() {

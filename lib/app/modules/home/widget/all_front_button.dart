@@ -14,16 +14,22 @@ class CopterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-          controller.triggerFly();
-        },
-        icon: SizedBox(
-          height: Get.width / 3,
-          width: Get.width / 3,
-          child: Image.asset(
-            ImageAsset.copterButton,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: Get.width / 50,
+          top: Get.width / 150,
+        ),
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            controller.triggerFly();
+          },
+          icon: SizedBox(
+            height: Get.width / 3.5,
+            width: Get.width / 3.5,
+            child: Image.asset(
+              ImageAsset.copterButton,
+            ),
           ),
         ),
       ),
@@ -42,16 +48,22 @@ class AnywhereTravelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topRight,
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-          controller.triggerTravel();
-        },
-        icon: SizedBox(
-          height: Get.width / 3,
-          width: Get.width / 3,
-          child: Image.asset(
-            ImageAsset.doorButton,
+      child: Padding(
+        padding: EdgeInsets.only(
+          right: Get.width / 50,
+          top: Get.width / 150,
+        ),
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            controller.triggerTravel();
+          },
+          icon: SizedBox(
+            height: Get.width / 3.5,
+            width: Get.width / 3.5,
+            child: Image.asset(
+              ImageAsset.doorButton,
+            ),
           ),
         ),
       ),
