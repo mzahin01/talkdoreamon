@@ -15,11 +15,11 @@ class Foods extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.bottomRight,
       child: Padding(
         padding: EdgeInsets.only(
           bottom: Get.width / 30,
-          left: Get.width / 30,
+          right: Get.width / 30,
         ),
         child: SizedBox(
           height: 120,
@@ -29,32 +29,67 @@ class Foods extends StatelessWidget {
             activeForegroundColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             renderOverlay: false,
-            // activeIcon: Icons.,
-            direction: SpeedDialDirection.right,
-            activeIcon: Icons.food_bank_outlined,
-            // Removes the white overlay
-            // shape:
-            //     const CircleBorder(), // Ensures round shape with no extra focus
-            // childMargin: EdgeInsets.zero, // Removes extra margin
-            // childPadding: EdgeInsets.zero, // Removes extra padding
+            direction: SpeedDialDirection.up,
+            activeIcon: Icons.select_all,
+            childPadding: EdgeInsets.only(right: Get.width / 20),
+            childrenButtonSize: Size.fromRadius(Get.width / 11),
             children: [
               SpeedDialChild(
                 child: const RiveAnimation.asset(LottieAsset.doraCake),
-                backgroundColor: Colors.red,
-                onTap: () {},
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.Doracake();
+                },
               ),
               SpeedDialChild(
-                child: const Icon(Icons.call),
-                backgroundColor: Colors.green,
-                onTap: () {},
+                child: const RiveAnimation.asset(LottieAsset.iceCream),
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.IceCream();
+                },
               ),
               SpeedDialChild(
-                child: const Icon(Icons.mail),
-                backgroundColor: Colors.blue,
-                onTap: () {},
+                child: const RiveAnimation.asset(LottieAsset.chicken),
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.Chicken();
+                },
+              ),
+              SpeedDialChild(
+                child: const RiveAnimation.asset(LottieAsset.strawberry),
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.Strawberry();
+                },
+              ),
+              SpeedDialChild(
+                child: const RiveAnimation.asset(LottieAsset.candy),
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.HellCandy();
+                },
+              ),
+              SpeedDialChild(
+                child: const RiveAnimation.asset(LottieAsset.apple),
+                backgroundColor: Colors.transparent,
+                onTap: () async {
+                  controller.triggerNoEat();
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  controller.RedApple();
+                },
               ),
             ],
-            activeChild: const RiveAnimation.asset(LottieAsset.allFood),
+            activeChild: const RiveAnimation.asset(LottieAsset.foodWithBag),
             child: const RiveAnimation.asset(LottieAsset.allFood),
           ),
         ),

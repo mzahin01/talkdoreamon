@@ -4,7 +4,6 @@ import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/modules/home/widget/foods.dart';
 import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 import '../controllers/home_controller.dart';
-import 'food_option_sheet.dart';
 
 class Doremon extends StatelessWidget {
   const Doremon({

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
-import 'package:talkdoraemon/app/modules/home/widget/widget.dart';
 import 'package:talkdoraemon/app/routes/app_pages.dart';
-import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 
 class AllButtons extends StatelessWidget {
   const AllButtons({
@@ -17,35 +15,6 @@ class AllButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            foodIcons(
-              LottieAsset.doraCake,
-              controller.Doracake,
-            ),
-            foodIcons(
-              LottieAsset.iceCream,
-              controller.IceCream,
-            ),
-            foodIcons(
-              LottieAsset.chicken,
-              controller.Chicken,
-            ),
-            foodIcons(
-              LottieAsset.strawberry,
-              controller.Strawberry,
-            ),
-            foodIcons(
-              LottieAsset.candy,
-              controller.HellCandy,
-            ),
-            foodIcons(
-              LottieAsset.apple,
-              controller.RedApple,
-            ),
-          ],
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

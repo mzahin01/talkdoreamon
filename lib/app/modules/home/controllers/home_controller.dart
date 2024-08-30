@@ -123,7 +123,7 @@ class HomeController extends GetxController {
       _travelInput = controller.findInput<bool>('Travel');
       _chillinInput = controller.findInput<bool>('Chillin');
       _listenToggleInput = controller.findInput<bool>('ListenToggle');
-      _noEatInput = controller.findInput<bool>('NoEat');
+      _noEatInput = controller.findInput<bool>('noEat');
       _eatInput = controller.findInput<bool>('Eat');
       _rightLegPunchInput = controller.findInput<bool>('RightLegPunch');
       _leftLegPunchInput = controller.findInput<bool>('LeftLegPunch');
