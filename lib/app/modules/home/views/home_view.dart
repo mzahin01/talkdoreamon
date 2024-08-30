@@ -20,10 +20,13 @@ class HomeView extends GetView<HomeController> {
             child: Stack(
               children: [
                 Doremon(controller: controller),
-                AllButtons(controller: controller),
+                // AllButtons(controller: controller),
                 Gadgets(controller: controller),
                 CopterButton(controller: controller),
                 AnywhereTravelButton(controller: controller),
+                GadgetsButton(
+                  controller: controller,
+                )
               ],
             ),
           ),
