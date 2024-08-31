@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
-import 'package:talkdoraemon/app/modules/home/widget/rect.dart';
+import 'package:talkdoraemon/app/modules/home/widget/gadget_rect.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart';
 
 class Gadgets extends StatelessWidget {

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
 import 'package:talkdoraemon/app/routes/app_pages.dart';
+import 'package:talkdoraemon/app/styles/spacing.dart';
 
-class AllButtons extends StatelessWidget {
-  const AllButtons({
+class TestingButtons extends StatelessWidget {
+  const TestingButtons({
     super.key,
     required this.controller,
   });
@@ -15,6 +16,7 @@ class AllButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Spacing.sb100,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
