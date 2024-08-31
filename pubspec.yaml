@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   firebase_core: ^3.1.1
   rive: ^0.13.9
-  flutter_sound: ^9.7.2
   flutter_screenutil: ^5.9.3
   infinite_carousel: ^1.1.1
   flutter_speed_dial: ^7.0.0
