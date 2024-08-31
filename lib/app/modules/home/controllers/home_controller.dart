@@ -1,4 +1,5 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -165,13 +166,8 @@ class HomeController extends GetxController {
 
   Future<void> triggerFly() async {
     if (animating) {
-      print('Anime entering -');
-      print(animating);
       return;
     } else {
-      print('Anime IN -');
-      print(animating);
-
       await Future.delayed(const Duration(milliseconds: 0), () {
         animating = true;
         _flyInput?.value = true;
