@@ -190,9 +190,9 @@ class HomeController extends GetxController {
     } else {
       await Future.delayed(const Duration(milliseconds: 0), () {
         animating = true;
-        triggerSAndO();
+        // triggerSAndO();
       });
-      await Future.delayed(const Duration(milliseconds: 4500), () {
+      await Future.delayed(const Duration(milliseconds: 0), () {
         _travelInput?.value = true;
       });
       await Future.delayed(const Duration(milliseconds: 700), () {
