@@ -12,24 +12,21 @@ class AnywhereDoorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Padding(
-        padding: EdgeInsets.only(
-          right: Get.width / 50,
-          top: Get.width / 150,
-        ),
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            controller.triggerTravel();
-          },
-          icon: SizedBox(
-            height: Get.width / 3.5,
-            width: Get.width / 3.5,
-            child: Image.asset(
-              ImageAsset.doorButton,
-            ),
+    return Padding(
+      padding: EdgeInsets.only(
+        right: Get.width / 50,
+        top: Get.width / 150,
+      ),
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          controller.triggerTravel();
+        },
+        icon: SizedBox(
+          height: Get.width / 3.5,
+          width: Get.width / 3.5,
+          child: Image.asset(
+            ImageAsset.doorButton,
           ),
         ),
       ),

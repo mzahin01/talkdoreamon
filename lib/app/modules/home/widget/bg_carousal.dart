@@ -13,23 +13,26 @@ class CarouselWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: Get.height,
-      width: Get.width + 20,
-      child: InfiniteCarousel.builder(
-        itemCount: controller.bgList.length,
-        itemExtent: Get.width,
-        center: true,
-        anchor: 1,
-        controller: controller.scrollController,
-        velocityFactor: .3,
-        loop: true,
-        itemBuilder: (context, itemIndex, realIndex) {
-          return Image.asset(
-            controller.bgList[itemIndex],
-            fit: BoxFit.fill,
-          );
-        },
+    return Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        height: Get.height,
+        width: Get.width,
+        child: InfiniteCarousel.builder(
+          itemCount: controller.bgList.length,
+          itemExtent: Get.width,
+          center: true,
+          anchor: 1,
+          controller: controller.scrollController,
+          velocityFactor: .3,
+          loop: true,
+          itemBuilder: (context, itemIndex, realIndex) {
+            return Image.asset(
+              controller.bgList[itemIndex],
+              fit: BoxFit.cover,
+            );
+          },
+        ),
       ),
     );
   }

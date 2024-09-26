@@ -20,16 +20,10 @@ class Doremon extends StatelessWidget {
       child: SizedBox(
         width: Get.width,
         height: Get.width * (1250 / 700),
-        child: Stack(
-          children: [
-            RiveAnimation.asset(
-              LottieAsset.doraemon,
-              fit: BoxFit.fitWidth,
-              onInit: controller.onRiveInit,
-            ),
-            // Here is Food Bag icon.
-            FoodBagButton(controller: controller),
-          ],
+        child: RiveAnimation.asset(
+          LottieAsset.doraemon,
+          fit: BoxFit.fitWidth,
+          onInit: controller.onRiveInit,
         ),
       ),
     );

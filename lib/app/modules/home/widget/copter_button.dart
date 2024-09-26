@@ -12,24 +12,21 @@ class CopterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: Get.width / 50,
-          top: Get.width / 150,
-        ),
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            controller.triggerFly();
-          },
-          icon: SizedBox(
-            height: Get.width / 3.5,
-            width: Get.width / 3.5,
-            child: Image.asset(
-              ImageAsset.copterButton,
-            ),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: Get.width / 50,
+        top: Get.width / 150,
+      ),
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          controller.triggerFly();
+        },
+        icon: SizedBox(
+          height: Get.width / 3.5,
+          width: Get.width / 3.5,
+          child: Image.asset(
+            ImageAsset.copterButton,
           ),
         ),
       ),

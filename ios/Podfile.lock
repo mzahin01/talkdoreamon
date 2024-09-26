@@ -11,10 +11,6 @@ PODS:
   - FirebaseCoreInternal (10.29.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - Flutter (1.0.0)
-  - flutter_sound (9.7.2):
-    - Flutter
-    - flutter_sound_core (= 9.7.2)
-  - flutter_sound_core (9.7.2)
   - GoogleUtilities/Environment (7.13.3):
     - GoogleUtilities/Privacy
     - PromisesObjC (< 3.0, >= 1.2)
@@ -24,9 +20,6 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.13.3)":
     - GoogleUtilities/Privacy
   - GoogleUtilities/Privacy (7.13.3)
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - PromisesObjC (2.4.0)
   - rive_common (0.0.1):
     - Flutter
@@ -34,8 +27,6 @@ PODS:
 DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
-  - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
 
 SPEC REPOS:
@@ -43,7 +34,6 @@ SPEC REPOS:
     - Firebase
     - FirebaseCore
     - FirebaseCoreInternal
-    - flutter_sound_core
     - GoogleUtilities
     - PromisesObjC
 
@@ -52,10 +42,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
-  flutter_sound:
-    :path: ".symlinks/plugins/flutter_sound/ios"
-  path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   rive_common:
     :path: ".symlinks/plugins/rive_common/ios"
 
@@ -65,10 +51,7 @@ SPEC CHECKSUMS:
   FirebaseCore: a2b95ae4ce7c83ceecfbbbe3b6f1cddc7415a808
   FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_sound: 9e0333787d4f3c505a8de206708c144cc31da3a0
-  flutter_sound_core: a220e912ee83aca1289aa5d9b725872341b1c426
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   rive_common: cbbac3192af00d7341f19dae2f26298e9e37d99e
 

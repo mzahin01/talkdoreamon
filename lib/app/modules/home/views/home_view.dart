@@ -5,6 +5,7 @@ import '../widget/aw_door_button.dart';
 import '../widget/bg_carousal.dart';
 import '../widget/copter_button.dart';
 import '../widget/doremon.dart';
+import '../widget/food_speed_dial.dart';
 import '../widget/gadget_button.dart';
 import '../widget/gadgets.dart';
 
@@ -21,9 +22,19 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Doremon(controller: controller),
                 Gadgets(controller: controller),
-                CopterButton(controller: controller),
-                AnywhereDoorButton(controller: controller),
-                GadgetsButton(controller: controller),
+                FoodBagButton(controller: controller),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CopterButton(controller: controller),
+                      GadgetsButton(controller: controller),
+                      AnywhereDoorButton(controller: controller),
+                    ],
+                  ),
+                ),
                 // TestingButtons(controller: controller),
               ],
             ),
