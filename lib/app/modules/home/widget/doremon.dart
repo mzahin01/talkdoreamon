@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:talkdoraemon/app/modules/home/widget/food_speed_dial.dart';
 import 'package:talkdoraemon/app/shared/const/lottie_asset.dart';
 import '../controllers/home_controller.dart';
 
