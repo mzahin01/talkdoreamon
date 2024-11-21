@@ -1,79 +1,68 @@
-// import 'dart:async';
-// import 'dart:io';
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter_sound/flutter_sound.dart';
-// import 'package:get/get.dart';
-// import 'package:permission_handler/permission_handler.dart';
+import 'package:get/get.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
-// class TalkingTomService extends GetxService {
-//   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-//   final FlutterSoundPlayer _player = FlutterSoundPlayer();
+class SoundService extends GetxService {
+  final Codec _codec = Codec.aacMP4;
+  final String _mPath = 'tau_file.mp4';
+  final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
+  final FlutterSoundRecorder _mRecorder = FlutterSoundRecorder();
+  bool _mPlayerIsInited = false;
+  bool _mRecorderIsInited = false;
+  bool _mplaybackReady = false;
 
-//   RxBool isRecording = false.obs;
-//   RxBool isPlaying = false.obs;
-//   Rx<File?> recordedAudio = Rx<File?>(null);
+  @override
+  void onInit() {
+    super.onInit();
+    _initializePlayer();
+    _initializeRecorder();
+  }
 
-//   Future<TalkingTomService> init() async {
-//     // Request microphone permissions
-//     await Permission.microphone.request();
-//     await Permission.storage.request();
+  Future<void> _initializePlayer() async {
+    await _mPlayer.openPlayer();
+    _mPlayerIsInited = true;
+  }
 
-//     // Initialize recorder and player
-//     await _recorder.openRecorder();
-//     await _player.openPlayer();
+  Future<void> _initializeRecorder() async {
+    await _mRecorder.openRecorder();
+    _mRecorderIsInited = true;
+  }
 
-//     return this;
-//   }
+  Future<void> record() async {
+    if (_mRecorderIsInited) {
+      await _mRecorder.startRecorder(
+        toFile: _mPath,
+        codec: _codec,
+      );
+      _mplaybackReady = false;
+    }
+  }
 
-//   Future<void> startRecording() async {
-//     if (await Permission.microphone.isGranted) {
-//       final tempDir = await getTempDirectory();
-//       final audioPath = '${tempDir.path}/recorded_audio.wav';
+  Future<void> stopRecording() async {
+    if (_mRecorderIsInited) {
+      await _mRecorder.stopRecorder();
+      _mplaybackReady = true;
+    }
+  }
 
-//       await _recorder.startRecorder(
-//         toFile: audioPath,
-//         codec: Codec.pcm16WAV,
-//       );
+  Future<void> play() async {
+    if (_mPlayerIsInited && _mplaybackReady) {
+      await _mPlayer.startPlayer(
+        fromURI: _mPath,
+        codec: _codec,
+      );
+    }
+  }
 
-//       isRecording.value = true;
-//     }
-//   }
+  Future<void> stopPlaying() async {
+    if (_mPlayerIsInited) {
+      await _mPlayer.stopPlayer();
+    }
+  }
 
-//   Future<void> stopRecording() async {
-//     final path = await _recorder.stopRecorder();
-//     isRecording.value = false;
-
-//     if (path != null) {
-//       recordedAudio.value = File(path);
-//     }
-//   }
-
-//   Future<void> playRecording() async {
-//     if (recordedAudio.value != null) {
-//       await _player.startPlayer(
-//         fromURI: recordedAudio.value!.path,
-//         codec: Codec.pcm16WAV,
-//         whenFinished: () {
-//           isPlaying.value = false;
-//         },
-//       );
-//       isPlaying.value = true;
-//     }
-//   }
-
-//   Future<void> stopPlaying() async {
-//     await _player.stopPlayer();
-//     isPlaying.value = false;
-//   }
-
-//   Future<Directory> getTempDirectory() async {
-//     return Directory.systemTemp;
-//   }
-
-//   @override
-//   void onClose() {
-//     _recorder.closeRecorder();
-//     _player.closePlayer();
-//     super.onClose();
-//   }
-// }
+  Future<void> recordAndReplace() async {
+    if (_mRecorder.isRecording) {
+      await stopRecording();
+    }
+    await record();
+  }
+}
