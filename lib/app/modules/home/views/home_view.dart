@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:talkdoraemon/app/modules/decible.dart';
 import 'package:talkdoraemon/app/modules/sound.dart';
 import '../controllers/home_controller.dart';
 import '../widget/aw_door_button.dart';
@@ -15,9 +16,17 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Get.to(() => const SimpleRecorder());
-      }),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          FloatingActionButton(onPressed: () {
+            Get.to(() => const SimpleRecorder());
+          }),
+          FloatingActionButton(onPressed: () {
+            Get.to(() => const RecorderOnProgress());
+          }),
+        ],
+      ),
       body: Stack(
         children: [
           CarouselWidget(controller: controller),
