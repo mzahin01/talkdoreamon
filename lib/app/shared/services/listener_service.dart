@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DecibelService extends GetxService {
+  DecibelService get to => Get.find();
+
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
 
   // Reactive variables for monitoring

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 
 class SoundService extends GetxService {
+  SoundService get to => Get.find();
+
   final Codec _codec = Codec.aacMP4;
   final String _mPath = 'tau_file.mp4';
   final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
