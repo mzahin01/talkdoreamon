@@ -5,7 +5,7 @@ import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
-import '../../../shared/services/talking_service.dart';
+import '../../../shared/services/sound_service.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();

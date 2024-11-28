@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:talkdoraemon/app/shared/services/listener_service.dart';
-import 'package:talkdoraemon/app/shared/services/talking_service.dart';
+import 'package:talkdoraemon/app/shared/services/decible_service.dart';
+import 'package:talkdoraemon/app/shared/services/sound_service.dart';
 
 import 'app/routes/app_pages.dart';
 

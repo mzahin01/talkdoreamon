@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talkdoraemon/app/modules/decible.dart';
-import 'package:talkdoraemon/app/modules/sound.dart';
+import 'package:talkdoraemon/app/shared/services/decible_service.dart';
 import '../controllers/home_controller.dart';
 import '../widget/aw_door_button.dart';
 import '../widget/bg_carousal.dart';
@@ -10,7 +10,6 @@ import '../widget/doremon.dart';
 import '../widget/food_speed_dial.dart';
 import '../widget/gadget_button.dart';
 import '../widget/gadgets.dart';
-// import '../widget/testing_buttons.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -21,15 +20,15 @@ class HomeView extends GetView<HomeController> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           FloatingActionButton(
-            child: const Text('SoundRD'),
+            child: const Text('Recording'),
             onPressed: () {
-              Get.to(() => const SimpleRecorder());
+              Get.to(() => const RecorderOnProgress());
             },
           ),
           FloatingActionButton(
-            child: const Text('DecibleRD'),
+            child: const Text('Monitor DB'),
             onPressed: () {
-              Get.to(() => const RecorderOnProgress());
+              DecibelService.to.startMonitoring();
             },
           ),
           FloatingActionButton(

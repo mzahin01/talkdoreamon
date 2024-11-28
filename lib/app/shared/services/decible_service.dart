@@ -45,22 +45,7 @@ class DecibelService extends GetxService {
     _recorderSubscription =
         _recorder.onProgress?.listen((RecordingDisposition disposition) {
       double decibels = disposition.decibels ?? 0.0;
-
-      // Update current decibel level
-      currentDecibelLevel.value = decibels;
-
-      // Check threshold and update state
-      bool nowAboveThreshold = decibels > threshold;
-      if (nowAboveThreshold != isAboveThreshold.value) {
-        isAboveThreshold.value = nowAboveThreshold;
-
-        // Optional: Add custom logic when threshold changes
-        if (nowAboveThreshold) {
-          print('Decibel level exceeded $threshold dB');
-        } else {
-          print('Decibel level dropped below $threshold dB');
-        }
-      }
+      print('Decibel level  $decibels dB');
     });
 
     isRecording.value = true;
