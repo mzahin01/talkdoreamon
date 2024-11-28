@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -37,24 +39,27 @@ class HomeController extends GetxController {
     });
   }
 
-  double threshold = 20.0;
+  double threshold = 50.0;
+  bool isListening = false;
 
   double get decibelLevel => DecibelService.to.decibelLevel.value;
   Future<void> handleSpeaking() async {
-    if (decibelLevel > threshold) {
+    if (decibelLevel > threshold && !isListening) {
       await Future.delayed(const Duration(seconds: 1));
       if (decibelLevel > threshold) {
         triggerListenToggle();
         recordSound();
-        if (decibelLevel < threshold) {
-          await Future.delayed(const Duration(seconds: 1));
-          if (decibelLevel < threshold) {
-            triggerListenToggle();
-            triggerSpeak();
-            await playSound();
-            triggerSpeak();
-          }
-        }
+        isListening = true;
+      }
+    }
+    if (decibelLevel < threshold && isListening) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (decibelLevel < threshold) {
+        triggerListenToggle();
+        triggerSpeak();
+        await playSound();
+        triggerSpeak();
+        isListening = false;
       }
     }
     print('Current decibel level: $decibelLevel');
