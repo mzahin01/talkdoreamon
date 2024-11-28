@@ -5,6 +5,8 @@ import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
+import '../../../shared/services/talking_service.dart';
+
 class HomeController extends GetxController {
   // Background Images List
   List<String> bgList = [
@@ -63,10 +65,24 @@ class HomeController extends GetxController {
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
 
+  // Inject SoundService
+  final SoundService soundService = Get.find<SoundService>();
+
   @override
   void onInit() {
     super.onInit();
+
     scrollController = InfiniteScrollController();
+  }
+
+  // Function to record sound
+  Future<void> recordSound() async {
+    await soundService.getRecorderFn();
+  }
+
+  // Function to play sound
+  Future<void> playSound() async {
+    await soundService.play();
   }
 
   // Carousel Navigation Methods

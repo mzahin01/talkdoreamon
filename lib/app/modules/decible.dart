@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 typedef Fn = void Function();
 
-/// Example app.
 class RecorderOnProgress extends StatefulWidget {
   const RecorderOnProgress({super.key});
 

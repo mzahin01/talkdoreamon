@@ -19,6 +19,14 @@ class SoundService extends GetxService {
     _initializeRecorder();
   }
 
+  getRecorderFn() {
+    if (!_mRecorderIsInited || !_mPlayer.isStopped) {
+      return null;
+    }
+    return _mRecorder.isStopped ? record : stopRecording();
+    // print('mmmm');
+  }
+
   Future<void> _initializePlayer() async {
     await _mPlayer.openPlayer();
     _mPlayerIsInited = true;

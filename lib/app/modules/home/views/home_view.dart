@@ -10,6 +10,7 @@ import '../widget/doremon.dart';
 import '../widget/food_speed_dial.dart';
 import '../widget/gadget_button.dart';
 import '../widget/gadgets.dart';
+// import '../widget/testing_buttons.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -19,12 +20,30 @@ class HomeView extends GetView<HomeController> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          FloatingActionButton(onPressed: () {
-            Get.to(() => const SimpleRecorder());
-          }),
-          FloatingActionButton(onPressed: () {
-            Get.to(() => const RecorderOnProgress());
-          }),
+          FloatingActionButton(
+            child: const Text('SoundRD'),
+            onPressed: () {
+              Get.to(() => const SimpleRecorder());
+            },
+          ),
+          FloatingActionButton(
+            child: const Text('DecibleRD'),
+            onPressed: () {
+              Get.to(() => const RecorderOnProgress());
+            },
+          ),
+          FloatingActionButton(
+            child: const Text('Record'),
+            onPressed: () {
+              controller.recordSound();
+            },
+          ),
+          FloatingActionButton(
+            child: const Text('Play'),
+            onPressed: () {
+              controller.playSound();
+            },
+          ),
         ],
       ),
       body: Stack(
