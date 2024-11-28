@@ -55,6 +55,9 @@ class SoundService extends GetxService {
   }
 
   Future<void> play() async {
+    if (_mRecorder.isRecording) {
+      await stopRecording();
+    }
     if (_mPlayerIsInited && _mplaybackReady) {
       await _mPlayer.startPlayer(
         fromURI: _mPath,
