@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:talkdoraemon/app/modules/home/controllers/home_controller.dart';
 
 import '../controllers/test_page_controller.dart';
 
@@ -13,10 +14,10 @@ class TestPageView extends GetView<TestPageController> {
         title: const Text('TestPageView'),
         centerTitle: true,
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'TestPageView is working',
-          style: TextStyle(fontSize: 20),
+          'TestPageView is ${HomeController.to.animating}',
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );

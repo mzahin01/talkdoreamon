@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 
 class SoundService extends GetxService {
-  SoundService get to => Get.find();
+  static SoundService get to => Get.find();
 
   final Codec _codec = Codec.aacMP4;
   final String _mPath = 'tau_file.mp4';
@@ -23,7 +23,7 @@ class SoundService extends GetxService {
     if (!_mRecorderIsInited || !_mPlayer.isStopped) {
       return null;
     }
-    return _mRecorder.isStopped ? record : stopRecording();
+    return _mRecorder.isStopped ? recordAndReplace() : stopRecording();
     // print('mmmm');
   }
 

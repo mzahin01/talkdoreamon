@@ -8,6 +8,8 @@ import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 import '../../../shared/services/talking_service.dart';
 
 class HomeController extends GetxController {
+  static HomeController get to => Get.find();
+
   // Background Images List
   List<String> bgList = [
     cia.ImageAsset.background0,
@@ -65,9 +67,6 @@ class HomeController extends GetxController {
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
 
-  // Inject SoundService
-  final SoundService soundService = Get.find<SoundService>();
-
   @override
   void onInit() {
     super.onInit();
@@ -77,12 +76,12 @@ class HomeController extends GetxController {
 
   // Function to record sound
   Future<void> recordSound() async {
-    await soundService.getRecorderFn();
+    SoundService.to.getRecorderFn();
   }
 
   // Function to play sound
   Future<void> playSound() async {
-    await soundService.play();
+    await SoundService.to.play();
   }
 
   // Carousel Navigation Methods
