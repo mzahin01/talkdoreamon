@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:talkdoraemon/app/modules/decible.dart';
-import 'package:talkdoraemon/app/shared/services/decible_service.dart';
 import '../controllers/home_controller.dart';
 import '../widget/aw_door_button.dart';
 import '../widget/bg_carousal.dart';
@@ -16,35 +14,6 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          FloatingActionButton(
-            child: const Text('Recording'),
-            onPressed: () {
-              Get.to(() => const RecorderOnProgress());
-            },
-          ),
-          FloatingActionButton(
-            child: const Text('Monitor DB'),
-            onPressed: () {
-              DecibelService.to.startMonitoring();
-            },
-          ),
-          FloatingActionButton(
-            child: const Text('Record'),
-            onPressed: () {
-              controller.recordSound();
-            },
-          ),
-          FloatingActionButton(
-            child: const Text('Play'),
-            onPressed: () {
-              controller.playSound();
-            },
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           CarouselWidget(controller: controller),

@@ -1,27 +1,19 @@
 import 'dart:async';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DecibelService extends GetxService {
   static DecibelService get to => Get.find();
 
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-
-  // Reactive variables for monitoring
-  RxBool isRecording = false.obs;
-  RxDouble currentDecibelLevel = 0.0.obs;
-  RxBool isAboveThreshold = false.obs;
-
-  final double threshold;
+  bool _isRecorderInitialized = false;
   StreamSubscription? _recorderSubscription;
 
-  DecibelService({this.threshold = 50.0});
-
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
-    await _initializeRecorder();
+    _initializeRecorder();
   }
 
   Future<void> _initializeRecorder() async {
@@ -32,73 +24,35 @@ class DecibelService extends GetxService {
     }
 
     await _recorder.openRecorder();
-  }
+    _isRecorderInitialized = true;
 
-  Future<void> startMonitoring() async {
-    if (isRecording.value) return;
-
-    await _recorder.startRecorder(
-      codec: Codec.pcm16WAV,
-      toStream: null,
+    await _recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 100),
     );
 
-    _recorderSubscription =
-        _recorder.onProgress?.listen((RecordingDisposition disposition) {
-      double decibels = disposition.decibels ?? 0.0;
-      print('Decibel level  $decibels dB');
-    });
-
-    isRecording.value = true;
+    _startRecording();
   }
 
-  Future<void> stopMonitoring() async {
-    await _recorderSubscription?.cancel();
-    await _recorder.stopRecorder();
+  void _startRecording() {
+    if (!_isRecorderInitialized) return;
+    _recorderSubscription = _recorder.onProgress!.listen((event) {
+      double decibels = event.decibels ?? 0.0;
+      print('Current decibel level: $decibels dB');
+    });
 
-    // Reset values
-    isRecording.value = false;
-    currentDecibelLevel.value = 0.0;
-    isAboveThreshold.value = false;
+    _recorder.startRecorder(
+      toFile: 'decibel_record.aac',
+      codec: Codec.aacMP4,
+      sampleRate: 44100,
+      numChannels: 1,
+    );
   }
 
   @override
-  Future<void> onClose() async {
-    await stopMonitoring();
-    await _recorder.closeRecorder();
+  void onClose() {
+    _recorderSubscription?.cancel();
+    _recorder.stopRecorder();
+    _recorder.closeRecorder();
     super.onClose();
   }
 }
-
-// // Example Usage in a Widget
-// class DecibelMonitorWidget extends StatelessWidget {
-//   final DecibelService _decibelService = Get.put(DecibelService(threshold: 50.0));
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Obx(() => Text(
-//               'Current Decibel Level: ${_decibelService.currentDecibelLevel.value.toStringAsFixed(2)}',
-//             )),
-//             Obx(() => Text(
-//               'Above Threshold: ${_decibelService.isAboveThreshold.value}',
-//             )),
-//             ElevatedButton(
-//               onPressed: () => _decibelService.isRecording.value 
-//                 ? _decibelService.stopMonitoring() 
-//                 : _decibelService.startMonitoring(),
-//               child: Obx(() => Text(
-//                 _decibelService.isRecording.value 
-//                   ? 'Stop Monitoring' 
-//                   : 'Start Monitoring'
-//               )),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
