@@ -5,6 +5,7 @@ import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
+import '../../../shared/services/decible_service.dart';
 import '../../../shared/services/sound_service.dart';
 
 class HomeController extends GetxController {
@@ -23,6 +24,60 @@ class HomeController extends GetxController {
 
   // Infinite Carousel Controller
   late InfiniteScrollController scrollController;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    scrollController = InfiniteScrollController();
+
+    // Keep printing the decibel level
+    ever(DecibelService.to.decibelLevel, (_) {
+      handleSpeaking();
+    });
+  }
+
+  double threshold = 20.0;
+
+  double get decibelLevel => DecibelService.to.decibelLevel.value;
+  Future<void> handleSpeaking() async {
+    if (decibelLevel > threshold) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (decibelLevel > threshold) {
+        triggerListenToggle();
+        recordSound();
+        if (decibelLevel < threshold) {
+          await Future.delayed(const Duration(seconds: 1));
+          if (decibelLevel < threshold) {
+            triggerListenToggle();
+            triggerSpeak();
+            await playSound();
+            triggerSpeak();
+          }
+        }
+      }
+    }
+    print('Current decibel level: $decibelLevel');
+  }
+
+  // Function to record sound
+  Future<void> recordSound() async {
+    SoundService.to.getRecorderFn();
+  }
+
+  // Function to play sound
+  Future<void> playSound() async {
+    await SoundService.to.play();
+  }
+
+  // Carousel Navigation Methods
+  void next() {
+    scrollController.nextItem();
+  }
+
+  void back() {
+    scrollController.previousItem();
+  }
 
   // Animation-related Observables
   RxDouble AnimeContHeight = 50.0.obs;
@@ -66,32 +121,6 @@ class HomeController extends GetxController {
   SMIInput<bool>? _chicken;
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    scrollController = InfiniteScrollController();
-  }
-
-  // Function to record sound
-  Future<void> recordSound() async {
-    SoundService.to.getRecorderFn();
-  }
-
-  // Function to play sound
-  Future<void> playSound() async {
-    await SoundService.to.play();
-  }
-
-  // Carousel Navigation Methods
-  void next() {
-    scrollController.nextItem();
-  }
-
-  void back() {
-    scrollController.previousItem();
-  }
 
   // Toggle Function to Switch Between Two States
   Future<void> triggerFoodAnimation() async {

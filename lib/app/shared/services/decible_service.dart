@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class DecibelService extends GetxService {
   static DecibelService get to => Get.find();
-
+  RxDouble decibelLevel = 0.0.obs; // Reactive variable to track decibel level
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   bool _isRecorderInitialized = false;
   StreamSubscription? _recorderSubscription;
@@ -37,7 +37,8 @@ class DecibelService extends GetxService {
     if (!_isRecorderInitialized) return;
     _recorderSubscription = _recorder.onProgress!.listen((event) {
       double decibels = event.decibels ?? 0.0;
-      print('Current decibel level: $decibels dB');
+      decibelLevel.value = decibels;
+      // print('Decibel level: $decibels');
     });
 
     _recorder.startRecorder(
