@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -34,35 +32,66 @@ class HomeController extends GetxController {
     scrollController = InfiniteScrollController();
 
     // Keep printing the decibel level
-    ever(DecibelService.to.decibelLevel, (_) {
-      handleSpeaking();
+    ever(DecibelService.to.decibelLevel, (_) async {
+      findMeanDecibelLevel();
+      await handleListening();
+      await handleSpeaking();
     });
   }
 
   double threshold = 50.0;
-  bool isListening = false;
+  bool isListening = true;
+  bool isSpeaking = false;
 
   double get decibelLevel => DecibelService.to.decibelLevel.value;
+  double meanDecibelLevel = 0.0;
+  List<double> decibelLevels = [];
+
+  // Function to handle listening
+  Future<void> handleListening() async {
+    if (isSpeaking) {
+      return;
+    }
+    if (meanDecibelLevel > threshold) {
+      isListening = true;
+      triggerListenToggle();
+      await recordSound();
+      isListening = false;
+    }
+    // print('Current decibel level: $decibelLevel');
+  }
+
   Future<void> handleSpeaking() async {
-    if (decibelLevel > threshold && !isListening) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (decibelLevel > threshold) {
-        triggerListenToggle();
-        recordSound();
-        isListening = true;
-      }
+    if (isListening) {
+      return;
     }
-    if (decibelLevel < threshold && isListening) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (decibelLevel < threshold) {
-        triggerListenToggle();
-        triggerSpeak();
-        await playSound();
-        triggerSpeak();
-        isListening = false;
-      }
+    if (meanDecibelLevel < threshold) {
+      isSpeaking = true;
+      triggerListenToggle();
+      triggerSpeak();
+      await playSound();
+
+      triggerSpeak();
+      isSpeaking = false;
     }
-    print('Current decibel level: $decibelLevel');
+    // print('Current decibel level: $decibelLevel');
+  }
+
+  findMeanDecibelLevel() {
+    // Save the last 1 second decibel levels
+    decibelLevels.add(decibelLevel);
+
+    // Keep only the last 1 second of decibel levels
+    if (decibelLevels.length > 10) {
+      decibelLevels.removeAt(0);
+    }
+
+    // Calculate the average decibel level over the last 1 second
+    meanDecibelLevel =
+        decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
+    // print('Mean decibel level: ${meanDecibelLevel}');
+    // print('Current decibel level: ${decibelLevel}');
+    // print('...........................');
   }
 
   // Function to record sound
