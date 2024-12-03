@@ -34,14 +34,27 @@ class HomeController extends GetxController {
     // Keep printing the decibel level
     ever(DecibelService.to.decibelLevel, (_) async {
       findMeanDecibelLevel();
+      // if (!isSpeaking && !isSpeaking) {
       await handleListening();
       await handleSpeaking();
+      print('Mean decibel level: $meanDecibelLevel');
+      print('Current decibel level: $decibelLevel');
+      print('CycleOn: $CycleOn');
+      print('isListening: $isListening');
+      print('isSpeaking: $isSpeaking');
+      print('...........................');
+      // }
+      // if (!isListening) {
+      //   await handleSpeaking();
+      //   //ok this part, it has problems.
+      // }
     });
   }
 
-  double threshold = 50.0;
-  bool isListening = true;
+  double threshold = 45.0;
+  bool isListening = false;
   bool isSpeaking = false;
+  bool CycleOn = false;
 
   double get decibelLevel => DecibelService.to.decibelLevel.value;
   double meanDecibelLevel = 0.0;
@@ -52,27 +65,35 @@ class HomeController extends GetxController {
     if (isSpeaking) {
       return;
     }
-    if (meanDecibelLevel > threshold) {
-      isListening = true;
-      triggerListenToggle();
-      await recordSound();
+    if (meanDecibelLevel < threshold) {
       isListening = false;
     }
-    // print('Current decibel level: $decibelLevel');
-  }
-
-  Future<void> handleSpeaking() async {
     if (isListening) {
       return;
     }
-    if (meanDecibelLevel < threshold) {
+    if (decibelLevel > threshold && !CycleOn) {
+      CycleOn = true;
+      isListening = true;
+      triggerListenToggle();
+      await recordSound();
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+  }
+
+  Future<void> handleSpeaking() async {
+    if (isListening || isSpeaking) {
+      return;
+    }
+    if (meanDecibelLevel < threshold && CycleOn) {
       isSpeaking = true;
       triggerListenToggle();
       triggerSpeak();
       await playSound();
-
+      // the play sound method is asynchronous, but the sound duration is not
       triggerSpeak();
+      await Future.delayed(const Duration(milliseconds: 500));
       isSpeaking = false;
+      CycleOn = false;
     }
     // print('Current decibel level: $decibelLevel');
   }
@@ -89,9 +110,6 @@ class HomeController extends GetxController {
     // Calculate the average decibel level over the last 1 second
     meanDecibelLevel =
         decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
-    // print('Mean decibel level: ${meanDecibelLevel}');
-    // print('Current decibel level: ${decibelLevel}');
-    // print('...........................');
   }
 
   // Function to record sound
