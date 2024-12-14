@@ -44,14 +44,10 @@ class HomeController extends GetxController {
       print('isSpeaking: $isSpeaking');
       print('...........................');
       // }
-      // if (!isListening) {
-      //   await handleSpeaking();
-      //   //ok this part, it has problems.
-      // }
     });
   }
 
-  double threshold = 45.0;
+  double threshold = 40.0;
   bool isListening = false;
   bool isSpeaking = false;
   bool CycleOn = false;
@@ -62,13 +58,10 @@ class HomeController extends GetxController {
 
   // Function to handle listening
   Future<void> handleListening() async {
-    if (isSpeaking) {
-      return;
-    }
-    if (meanDecibelLevel < threshold) {
+    if (isListening && meanDecibelLevel < threshold) {
       isListening = false;
     }
-    if (isListening) {
+    if (isListening || isSpeaking) {
       return;
     }
     if (decibelLevel > threshold && !CycleOn) {
