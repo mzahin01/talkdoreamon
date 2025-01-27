@@ -34,26 +34,92 @@ class HomeController extends GetxController {
     DecibelService.to.meanDecibelLevel.listen(decideToListenAndSpeak);
   }
 
-  double threshold = 40.0;
+  double threshold = 50.0;
   bool isListening = false;
   bool isSpeaking = false;
-  bool CycleOn = false;
+  int consecutiveLoudSamples = 0;
+  int consecutiveSilentSamples = 0;
+  Timer? cooldownTimer;
 
-  void decideToListenAndSpeak(meanDecibelLevel) async {
-    if (isListening && meanDecibelLevel < threshold) {
-      isListening = false;
-    }
-    if (isListening || isSpeaking) {
+  void decideToListenAndSpeak(double meanDb) async {
+    // Cooldown period after speaking
+    if (cooldownTimer != null && cooldownTimer!.isActive) {
       return;
     }
-    if (meanDecibelLevel > threshold && !CycleOn) {
-      CycleOn = true;
-      isListening = true;
-      print('started recording');
-      // triggerListenToggle();
-      // await recordSound();
-      // await Future.delayed(const Duration(milliseconds: 500));
+
+    // Speech detection logic
+    if (!isListening && !isSpeaking) {
+      if (meanDb > threshold) {
+        consecutiveLoudSamples++;
+        consecutiveSilentSamples = 0;
+
+        // Wait for 3 consecutive loud samples (300ms) to confirm speech
+        if (consecutiveLoudSamples >= 3) {
+          _startListening();
+        }
+      } else {
+        consecutiveLoudSamples = 0;
+      }
     }
+
+    // While listening, check for silence to stop recording
+    if (isListening) {
+      if (meanDb < threshold) {
+        consecutiveSilentSamples++;
+
+        // Wait for 5 consecutive silent samples (500ms) to confirm speech end
+        if (consecutiveSilentSamples >= 5) {
+          await _stopListeningAndRespond();
+        }
+      } else {
+        consecutiveSilentSamples = 0;
+      }
+    }
+  }
+
+  void _startListening() {
+    isListening = true;
+    consecutiveLoudSamples = 0;
+    print('=== STARTED LISTENING ===');
+    SoundService.to.recordAndReplace();
+    // Start recording
+    // triggerListenToggle();
+    // recordSound();
+  }
+
+  Future<void> _stopListeningAndRespond() async {
+    isListening = false;
+    print('=== ENDED LISTENING ===');
+    SoundService.to.stopRecording();
+
+    // // Process recorded audio
+    // print('=== STARTED PROCESSING ===');
+    // // await processAudio();
+    // print('=== ENDED PROCESSING ===');
+
+    // Start speaking
+    isSpeaking = true;
+    print('=== STARTED SPEAKING ===');
+    await SoundService.to.play();
+    // await playModifiedAudio();
+
+    // Simulate speaking duration
+    await Future.delayed(const Duration(seconds: 2));
+
+    // End speaking
+    isSpeaking = false;
+    // SoundService.to.stopPlaying();
+    print('=== ENDED SPEAKING ===');
+
+    // Start cooldown period
+    _startCooldown();
+  }
+
+  void _startCooldown() {
+    print('=== COOLDOWN STARTED ===');
+    cooldownTimer = Timer(const Duration(seconds: 2), () {
+      print('=== COOLDOWN ENDED ===');
+    });
   }
 
   // Future<void> handleSpeaking() async {
@@ -73,16 +139,6 @@ class HomeController extends GetxController {
   //   }
   //   // print('Current decibel level: $decibelLevel');
   // }
-
-  // Function to record sound
-  Future<void> recordSound() async {
-    SoundService.to.getRecorderFn();
-  }
-
-  // Function to play sound
-  Future<void> playSound() async {
-    await SoundService.to.play();
-  }
 
   // Carousel Navigation Methods
   void next() {
