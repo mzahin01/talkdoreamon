@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -28,23 +30,8 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     scrollController = InfiniteScrollController();
-
-    // Keep printing the decibel level
-    ever(DecibelService.to.decibelLevel, (_) async {
-      findMeanDecibelLevel();
-      // if (!isSpeaking && !isSpeaking) {
-      await handleListening();
-      await handleSpeaking();
-      print('Mean decibel level: $meanDecibelLevel');
-      print('Current decibel level: $decibelLevel');
-      print('CycleOn: $CycleOn');
-      print('isListening: $isListening');
-      print('isSpeaking: $isSpeaking');
-      print('...........................');
-      // }
-    });
+    DecibelService.to.meanDecibelLevel.listen(decideToListenAndSpeak);
   }
 
   double threshold = 40.0;
@@ -52,58 +39,40 @@ class HomeController extends GetxController {
   bool isSpeaking = false;
   bool CycleOn = false;
 
-  double get decibelLevel => DecibelService.to.decibelLevel.value;
-  double meanDecibelLevel = 0.0;
-  List<double> decibelLevels = [];
-
-  // Function to handle listening
-  Future<void> handleListening() async {
+  void decideToListenAndSpeak(meanDecibelLevel) async {
     if (isListening && meanDecibelLevel < threshold) {
       isListening = false;
     }
     if (isListening || isSpeaking) {
       return;
     }
-    if (decibelLevel > threshold && !CycleOn) {
+    if (meanDecibelLevel > threshold && !CycleOn) {
       CycleOn = true;
       isListening = true;
-      triggerListenToggle();
-      await recordSound();
-      await Future.delayed(const Duration(milliseconds: 500));
+      print('started recording');
+      // triggerListenToggle();
+      // await recordSound();
+      // await Future.delayed(const Duration(milliseconds: 500));
     }
   }
 
-  Future<void> handleSpeaking() async {
-    if (isListening || isSpeaking) {
-      return;
-    }
-    if (meanDecibelLevel < threshold && CycleOn) {
-      isSpeaking = true;
-      triggerListenToggle();
-      triggerSpeak();
-      await playSound();
-      // the play sound method is asynchronous, but the sound duration is not
-      triggerSpeak();
-      await Future.delayed(const Duration(milliseconds: 500));
-      isSpeaking = false;
-      CycleOn = false;
-    }
-    // print('Current decibel level: $decibelLevel');
-  }
-
-  findMeanDecibelLevel() {
-    // Save the last 1 second decibel levels
-    decibelLevels.add(decibelLevel);
-
-    // Keep only the last 1 second of decibel levels
-    if (decibelLevels.length > 10) {
-      decibelLevels.removeAt(0);
-    }
-
-    // Calculate the average decibel level over the last 1 second
-    meanDecibelLevel =
-        decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
-  }
+  // Future<void> handleSpeaking() async {
+  //   if (isListening || isSpeaking) {
+  //     return;
+  //   }
+  //   if (meanDecibelLevel < threshold && CycleOn) {
+  //     isSpeaking = true;
+  //     triggerListenToggle();
+  //     triggerSpeak();
+  //     await playSound();
+  //     // the play sound method is asynchronous, but the sound duration is not
+  //     triggerSpeak();
+  //     await Future.delayed(const Duration(milliseconds: 500));
+  //     isSpeaking = false;
+  //     CycleOn = false;
+  //   }
+  //   // print('Current decibel level: $decibelLevel');
+  // }
 
   // Function to record sound
   Future<void> recordSound() async {

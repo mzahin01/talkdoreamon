@@ -6,6 +6,9 @@ import 'package:permission_handler/permission_handler.dart';
 class DecibelService extends GetxService {
   static DecibelService get to => Get.find();
   RxDouble decibelLevel = 0.0.obs; // Reactive variable to track decibel level
+  RxDouble meanDecibelLevel =
+      0.0.obs; // Reactive variable to track mean decibel level
+  List<double> decibelLevels = [];
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   bool _isRecorderInitialized = false;
   StreamSubscription? _recorderSubscription;
@@ -35,10 +38,21 @@ class DecibelService extends GetxService {
 
   void _startRecording() {
     if (!_isRecorderInitialized) return;
-    _recorderSubscription = _recorder.onProgress!.listen((event) {
+    _recorderSubscription =
+        _recorder.onProgress!.listen((RecordingDisposition event) {
       double decibels = event.decibels ?? 0.0;
       decibelLevel.value = decibels;
-      // print('Decibel level: $decibels');
+      decibelLevels.add(decibels);
+
+      // Keep only the last 1 second of decibel levels
+      if (decibelLevels.length > 10) {
+        decibelLevels.removeAt(0);
+      }
+
+      // Calculate the average decibel level over the last 1 second
+      meanDecibelLevel.value =
+          decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
+      // print('Decibel level: $decibels, Mean decibel level: $meanDecibelLevel');
     });
 
     _recorder.startRecorder(
