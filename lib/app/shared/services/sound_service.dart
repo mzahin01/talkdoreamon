@@ -11,6 +11,7 @@ class SoundService extends GetxService {
   bool _mPlayerIsInited = false;
   bool _mRecorderIsInited = false;
   bool _mplaybackReady = false;
+  RxBool isPlaying = false.obs;
 
   @override
   void onInit() {
@@ -59,9 +60,13 @@ class SoundService extends GetxService {
       await stopRecording();
     }
     if (_mPlayerIsInited && _mplaybackReady) {
+      isPlaying.value = true;
       await _mPlayer.startPlayer(
         fromURI: _mPath,
         codec: _codec,
+        whenFinished: () {
+          isPlaying.value = false;
+        },
       );
     }
   }

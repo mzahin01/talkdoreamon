@@ -32,9 +32,23 @@ class HomeController extends GetxController {
     super.onInit();
     scrollController = InfiniteScrollController();
     DecibelService.to.meanDecibelLevel.listen(decideToListenAndSpeak);
+    SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
   }
 
-  double threshold = 50.0;
+  void stopSpeakingAndStartCooldown(isPlayingSoundService) {
+    if (isSpeaking && !isPlayingSoundService) {
+      // End speaking
+      isSpeaking = false;
+      SoundService.to.stopPlaying();
+      triggerSpeak();
+      print('=== ENDED SPEAKING ===');
+
+      // Start cooldown period
+      _startCooldown();
+    }
+  }
+
+  double threshold = 44.0;
   bool isListening = false;
   bool isSpeaking = false;
   int consecutiveLoudSamples = 0;
@@ -77,11 +91,12 @@ class HomeController extends GetxController {
     }
   }
 
-  void _startListening() {
+  Future<void> _startListening() async {
     isListening = true;
     consecutiveLoudSamples = 0;
     print('=== STARTED LISTENING ===');
-    SoundService.to.recordAndReplace();
+    await SoundService.to.recordAndReplace();
+    triggerListenToggle();
     // Start recording
     // triggerListenToggle();
     // recordSound();
@@ -90,7 +105,7 @@ class HomeController extends GetxController {
   Future<void> _stopListeningAndRespond() async {
     isListening = false;
     print('=== ENDED LISTENING ===');
-    SoundService.to.stopRecording();
+    await SoundService.to.stopRecording();
 
     // // Process recorded audio
     // print('=== STARTED PROCESSING ===');
@@ -100,19 +115,10 @@ class HomeController extends GetxController {
     // Start speaking
     isSpeaking = true;
     print('=== STARTED SPEAKING ===');
-    await SoundService.to.play();
+    SoundService.to.play();
+    triggerSpeak();
+
     // await playModifiedAudio();
-
-    // Simulate speaking duration
-    await Future.delayed(const Duration(seconds: 2));
-
-    // End speaking
-    isSpeaking = false;
-    // SoundService.to.stopPlaying();
-    print('=== ENDED SPEAKING ===');
-
-    // Start cooldown period
-    _startCooldown();
   }
 
   void _startCooldown() {
