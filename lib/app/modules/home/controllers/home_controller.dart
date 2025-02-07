@@ -40,7 +40,7 @@ class HomeController extends GetxController {
       // End speaking
       isSpeaking = false;
       SoundService.to.stopPlaying();
-      triggerSpeak();
+      triggerSpeakFalse();
       print('=== ENDED SPEAKING ===');
 
       // Start cooldown period
@@ -96,7 +96,7 @@ class HomeController extends GetxController {
     consecutiveLoudSamples = 0;
     print('=== STARTED LISTENING ===');
     await SoundService.to.recordAndReplace();
-    triggerListenToggle();
+    triggerListenTrue();
     // Start recording
     // triggerListenToggle();
     // recordSound();
@@ -105,6 +105,7 @@ class HomeController extends GetxController {
   Future<void> _stopListeningAndRespond() async {
     isListening = false;
     print('=== ENDED LISTENING ===');
+    triggerListenFalse();
     await SoundService.to.stopRecording();
 
     // // Process recorded audio
@@ -116,7 +117,7 @@ class HomeController extends GetxController {
     isSpeaking = true;
     print('=== STARTED SPEAKING ===');
     SoundService.to.play();
-    triggerSpeak();
+    triggerSpeakTrue();
 
     // await playModifiedAudio();
   }
@@ -255,8 +256,12 @@ class HomeController extends GetxController {
   }
 
   // Rive Trigger Methods
-  void triggerSpeak() {
+  void triggerSpeakTrue() {
     _speakInput?.value = true;
+  }
+
+  void triggerSpeakFalse() {
+    _speakInput?.value = false;
   }
 
   Future<void> triggerSAndO() async {
@@ -328,8 +333,12 @@ class HomeController extends GetxController {
     _chillinInput?.value = true;
   }
 
-  void triggerListenToggle() {
+  void triggerListenTrue() {
     _listenToggleInput?.value = true;
+  }
+
+  void triggerListenFalse() {
+    _listenToggleInput?.value = false;
   }
 
   void triggerNoEat() {
