@@ -24,6 +24,8 @@ dev_dependencies:
   flutter_lints: 4.0.0
   flutter_test: 
     sdk: flutter
+  flutter_launcher_icons: "^0.14.3"
+
 
 flutter:
   uses-material-design: true
@@ -31,7 +33,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/bg/
-    - assets/images/gadgets/
+    - assets/images/
     # - assets/rive/
     - assets/rive/foods/
     - assets/rive/doraemon/
@@ -41,3 +43,23 @@ flutter:
     - family: ComicSans
       fonts:
         - asset: assets/fonts/ComicSansMS3.ttf
+
+
+# Add this at the end of your pubspec.yaml file
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/bambooCopter.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/bambooCopter.png"
+    background_color: "#ffffff"
+    theme_color: "#0175C2"
+  windows:
+    generate: true
+    image_path: "assets/images/bambooCopter.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/bambooCopter.png"
