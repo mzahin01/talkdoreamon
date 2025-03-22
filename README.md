@@ -15,3 +15,9 @@ flutter build macos
 appdmg installer/macos_dmg/config.json installer/macos_dmg/doremon.dmg
 ```
 
+## GRADLE Sync without Android Studio
+
+```
+./gradlew clean assembleDebug --refresh-dependencies
+```
+
