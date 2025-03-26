@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 
@@ -61,6 +63,7 @@ class SoundService extends GetxService {
     }
     if (_mPlayerIsInited && _mplaybackReady) {
       isPlaying.value = true;
+      await _mPlayer.setSpeed(1.8 + (2.5 - 1.8) * Random().nextDouble());
       await _mPlayer.startPlayer(
         fromURI: _mPath,
         codec: _codec,

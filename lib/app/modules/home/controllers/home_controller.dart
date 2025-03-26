@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:async';
 
@@ -48,7 +48,7 @@ class HomeController extends GetxController {
     }
   }
 
-  double threshold = 44.0;
+  double threshold = 32.0;
   bool isListening = false;
   bool isSpeaking = false;
   int consecutiveLoudSamples = 0;
@@ -124,7 +124,7 @@ class HomeController extends GetxController {
 
   void _startCooldown() {
     print('=== COOLDOWN STARTED ===');
-    cooldownTimer = Timer(const Duration(seconds: 2), () {
+    cooldownTimer = Timer(const Duration(milliseconds: 100), () {
       print('=== COOLDOWN ENDED ===');
     });
   }
