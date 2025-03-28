@@ -14,6 +14,8 @@ import '../../../shared/services/sound_service.dart';
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
 
+  Timer? recordingTimeoutTimer;
+
   // Background Images List
   List<String> bgList = [
     cia.ImageAsset.background0,
@@ -35,16 +37,16 @@ class HomeController extends GetxController {
     DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
     SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
     // Monitor and adjust threshold based on ambient noise
-    Timer.periodic(const Duration(seconds: 10), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateAmbientThreshold();
     });
   }
 
   void _updateAmbientThreshold() {
-    if (ambientLevels.length >= 20) {
+    if (ambientLevels.length >= 10) {
       // Calculate ambient noise level (exclude outliers)
       ambientLevels.sort();
-      var relevantSamples = ambientLevels.sublist(5, ambientLevels.length - 5);
+      var relevantSamples = ambientLevels.sublist(2, ambientLevels.length - 2);
       var ambientNoise =
           relevantSamples.reduce((a, b) => a + b) / relevantSamples.length;
 
@@ -65,7 +67,7 @@ class HomeController extends GetxController {
       isSpeaking = false;
       SoundService.to.stopPlaying();
       triggerSpeakFalse();
-      print('=== ENDED SPEAKING ===');
+      debugPrint('=== ENDED SPEAKING ===');
 
       // Start cooldown period
       _startCooldown();
@@ -125,38 +127,45 @@ class HomeController extends GetxController {
   Future<void> _startListening() async {
     isListening = true;
     consecutiveLoudSamples = 0;
-    print('=== STARTED LISTENING ===');
+    debugPrint('=== STARTED LISTENING ===');
     await SoundService.to.recordAndReplace();
     triggerListenTrue();
-    // Start recording
-    // triggerListenToggle();
-    // recordSound();
+
+    // Start a 10-second timeout timer
+    recordingTimeoutTimer = Timer(const Duration(seconds: 10), () async {
+      if (isListening) {
+        debugPrint('=== RECORDING TIMEOUT (10s) ===');
+        await _stopListeningAndRespond();
+      }
+    });
   }
 
+// Modify _stopListeningAndRespond method
   Future<void> _stopListeningAndRespond() async {
+    // Cancel the timeout timer if it's active
+    recordingTimeoutTimer?.cancel();
+    recordingTimeoutTimer = null;
+
     isListening = false;
-    print('=== ENDED LISTENING ===');
+    debugPrint('=== ENDED LISTENING ===');
     triggerListenFalse();
     await SoundService.to.stopRecording();
 
     // // Process recorded audio
-    // print('=== STARTED PROCESSING ===');
+    //debugPrint('=== STARTED PROCESSING ===');
     // // await processAudio();
-    // print('=== ENDED PROCESSING ===');
-
+    //debugPrint('=== ENDED PROCESSING ===');
     // Start speaking
     isSpeaking = true;
-    print('=== STARTED SPEAKING ===');
+    debugPrint('=== STARTED SPEAKING ===');
     SoundService.to.play();
     triggerSpeakTrue();
-
-    // await playModifiedAudio();
   }
 
   void _startCooldown() {
-    print('=== COOLDOWN STARTED ===');
+    debugPrint('=== COOLDOWN STARTED ===');
     cooldownTimer = Timer(const Duration(seconds: 1), () {
-      print('=== COOLDOWN ENDED ===');
+      debugPrint('=== COOLDOWN ENDED ===');
     });
   }
 
@@ -175,7 +184,7 @@ class HomeController extends GetxController {
   //     isSpeaking = false;
   //     CycleOn = false;
   //   }
-  //   // print('Current decibel level: $decibelLevel');
+  //   //debugPrint('Current decibel level: $decibelLevel');
   // }
 
   // Carousel Navigation Methods
