@@ -9,9 +9,13 @@ import 'app/routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
   ]);
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,

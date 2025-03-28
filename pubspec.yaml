@@ -34,7 +34,7 @@ flutter:
     - assets/images/
     - assets/images/bg/
     - assets/images/
-    # - assets/rive/
+    - assets/test/
     - assets/rive/foods/
     - assets/rive/doraemon/
     # - assets/svgs/

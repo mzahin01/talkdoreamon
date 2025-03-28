@@ -13,6 +13,7 @@ class LottieAsset {
   static const String doraCake = 'assets/rive/foods/Dora.riv';
   static const String iceCream = 'assets/rive/foods/Ice.riv';
   static const String strawberry = 'assets/rive/foods/Straw.riv';
+  static const String testrg = 'assets/test/ramgorur.riv';
 
   LottieAsset._();
 }
