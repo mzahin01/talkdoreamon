@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 
@@ -21,14 +20,6 @@ class SoundService extends GetxService {
     _initializePlayer();
     _initializeRecorder();
   }
-
-  // getRecorderFn() {
-  //   if (!_mRecorderIsInited || !_mPlayer.isStopped) {
-  //     return null;
-  //   }
-  //   return _mRecorder.isStopped ? recordAndReplace() : stopRecording();
-  //   // print('mmmm');
-  // }
 
   Future<void> _initializePlayer() async {
     await _mPlayer.openPlayer();
@@ -63,7 +54,7 @@ class SoundService extends GetxService {
     }
     if (_mPlayerIsInited && _mplaybackReady) {
       isPlaying.value = true;
-      await _mPlayer.setSpeed(1.8 + (2.5 - 1.8) * Random().nextDouble());
+      await _mPlayer.setSpeed(1.3);
       await _mPlayer.startPlayer(
         fromURI: _mPath,
         codec: _codec,
@@ -85,5 +76,17 @@ class SoundService extends GetxService {
       await stopRecording();
     }
     await record();
+  }
+
+  @override
+  void onClose() {
+    try {
+      _mPlayer.stopPlayer();
+      _mRecorder.stopRecorder();
+      _mRecorder.closeRecorder();
+    } catch (e) {
+      debugPrint('Error closing recorder: $e');
+    }
+    super.onClose();
   }
 }

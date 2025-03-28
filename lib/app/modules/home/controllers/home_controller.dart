@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:rive/rive.dart';
@@ -31,8 +32,31 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     scrollController = InfiniteScrollController();
-    DecibelService.to.meanDecibelLevel.listen(decideToListenAndSpeak);
+    DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
     SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
+    // Monitor and adjust threshold based on ambient noise
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      _updateAmbientThreshold();
+    });
+  }
+
+  void _updateAmbientThreshold() {
+    if (ambientLevels.length >= 20) {
+      // Calculate ambient noise level (exclude outliers)
+      ambientLevels.sort();
+      var relevantSamples = ambientLevels.sublist(5, ambientLevels.length - 5);
+      var ambientNoise =
+          relevantSamples.reduce((a, b) => a + b) / relevantSamples.length;
+
+      // Set threshold dynamically (ambient + margin)
+      threshold.value = ambientNoise + 10.0;
+
+      debugPrint(
+          '${DateTime.now()} ------- Updated threshold: ${threshold.value}');
+
+      // Clear for next cycle
+      ambientLevels.clear();
+    }
   }
 
   void stopSpeakingAndStartCooldown(isPlayingSoundService) {
@@ -48,7 +72,9 @@ class HomeController extends GetxController {
     }
   }
 
-  double threshold = 32.0;
+  RxDouble threshold = 50.0.obs;
+  List<double> ambientLevels = [];
+
   bool isListening = false;
   bool isSpeaking = false;
   int consecutiveLoudSamples = 0;
@@ -56,6 +82,11 @@ class HomeController extends GetxController {
   Timer? cooldownTimer;
 
   void decideToListenAndSpeak(double meanDb) async {
+    // Add to ambient levels when not speaking or listening
+    if (!isListening && !isSpeaking && cooldownTimer == null) {
+      ambientLevels.add(meanDb);
+    }
+
     // Cooldown period after speaking
     if (cooldownTimer != null && cooldownTimer!.isActive) {
       return;
@@ -63,7 +94,7 @@ class HomeController extends GetxController {
 
     // Speech detection logic
     if (!isListening && !isSpeaking) {
-      if (meanDb > threshold) {
+      if (meanDb > threshold.value) {
         consecutiveLoudSamples++;
         consecutiveSilentSamples = 0;
 
@@ -78,7 +109,7 @@ class HomeController extends GetxController {
 
     // While listening, check for silence to stop recording
     if (isListening) {
-      if (meanDb < threshold) {
+      if (meanDb < threshold.value) {
         consecutiveSilentSamples++;
 
         // Wait for 5 consecutive silent samples (500ms) to confirm speech end
@@ -124,7 +155,7 @@ class HomeController extends GetxController {
 
   void _startCooldown() {
     print('=== COOLDOWN STARTED ===');
-    cooldownTimer = Timer(const Duration(milliseconds: 100), () {
+    cooldownTimer = Timer(const Duration(seconds: 1), () {
       print('=== COOLDOWN ENDED ===');
     });
   }
