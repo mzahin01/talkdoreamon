@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, avoid_print
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
 
@@ -26,6 +26,21 @@ class HomeController extends GetxController {
     cia.ImageAsset.background5,
     cia.ImageAsset.background6,
   ];
+
+  // Gadget Images List
+  List<String> gadgetList = [
+    cia.ImageAsset.anywhereDoor,
+    cia.ImageAsset.memory_bread,
+    cia.ImageAsset.shrink_ray,
+    cia.ImageAsset.timeMachine,
+    cia.ImageAsset.bamboo_copter,
+  ].obs;
+
+  RxInt gadgetIndex = 0.obs;
+
+  gadgetIndexChanged() {
+    gadgetIndex.value = (DateTime.now().millisecondsSinceEpoch % 5).toInt();
+  }
 
   // Infinite Carousel Controller
   late InfiniteScrollController scrollController;
@@ -169,25 +184,6 @@ class HomeController extends GetxController {
     });
   }
 
-  // Future<void> handleSpeaking() async {
-  //   if (isListening || isSpeaking) {
-  //     return;
-  //   }
-  //   if (meanDecibelLevel < threshold && CycleOn) {
-  //     isSpeaking = true;
-  //     triggerListenToggle();
-  //     triggerSpeak();
-  //     await playSound();
-  //     // the play sound method is asynchronous, but the sound duration is not
-  //     triggerSpeak();
-  //     await Future.delayed(const Duration(milliseconds: 500));
-  //     isSpeaking = false;
-  //     CycleOn = false;
-  //   }
-  //   //debugPrint('Current decibel level: $decibelLevel');
-  // }
-
-  // Carousel Navigation Methods
   void next() {
     scrollController.nextItem();
   }

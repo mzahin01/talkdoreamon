@@ -27,7 +27,7 @@ class Gadgets extends StatelessWidget {
             duration: Duration(milliseconds: controller.AnimeDuration.value),
             curve: Curves.easeOut,
             child: Image.asset(
-              ImageAsset.anywhereDoor,
+              controller.gadgetList[controller.gadgetIndex.value],
               fit: BoxFit.fitWidth,
             ),
           ),
