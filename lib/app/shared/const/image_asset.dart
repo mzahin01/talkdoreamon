@@ -21,6 +21,7 @@ class ImageAsset {
   static const String doorButton = 'assets/images/anywhereDoor.png';
   static const String copterButton = 'assets/images/bambooCopter.png';
   static const String gadgetsButton = 'assets/images/gadgets.png';
+  static const String splash = 'assets/images/splash.png';
 
   ImageAsset._();
 }
