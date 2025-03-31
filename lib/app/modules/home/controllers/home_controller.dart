@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
@@ -44,10 +45,14 @@ class HomeController extends GetxController {
 
   // Infinite Carousel Controller
   late InfiniteScrollController scrollController;
+  late AudioPlayer _audioPlayer;
 
   @override
   void onInit() {
     super.onInit();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.setAsset('assets/audio/manyToing.mp3');
+    _audioPlayer.setAsset('assets/audio/toing_real.mp3');
     scrollController = InfiniteScrollController();
     DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
     SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
@@ -269,8 +274,31 @@ class HomeController extends GetxController {
       _trunkPunchInput = controller.findInput<bool>('TrunkPunch');
       _rightHandPunchInput = controller.findInput<bool>('RightHandPunch');
       _leftHandPunchInput = controller.findInput<bool>('LeftHandPunch');
+      // updateButtonStates();
     }
   }
+
+  // void updateButtonStates() {
+  //   // Monitor punch inputs continuously
+  //   [
+  //     _rightLegPunchInput,
+  //     _leftLegPunchInput,
+  //     _headPunchInput,
+  //     _trunkPunchInput,
+  //     _rightHandPunchInput,
+  //     _leftHandPunchInput
+  //   ].forEach((input) {
+  //     if (input?.value == true) {
+  //       // Play punch sound
+  //       _audioPlayer.seek(Duration.zero);
+  //       _audioPlayer.play();
+  //       // Reset the input after a short delay
+  //       Future.delayed(const Duration(milliseconds: 100), () {
+  //         input?.value = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   // Rive Trigger Methods
   void triggerSpeakTrue() {
