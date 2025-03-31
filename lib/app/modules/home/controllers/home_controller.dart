@@ -53,6 +53,7 @@ class HomeController extends GetxController {
     _audioPlayer = AudioPlayer();
     _audioPlayer.setAsset('assets/audio/manyToing.mp3');
     _audioPlayer.setAsset('assets/audio/toing_real.mp3');
+    _audioPlayer.setAsset('assets/audio/yeah.mp3');
     scrollController = InfiniteScrollController();
     DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
     SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
@@ -313,8 +314,10 @@ class HomeController extends GetxController {
     if (debouncerActive) {
       return;
     } else {
-      await Future.delayed(const Duration(milliseconds: 0), () {
+      await Future.delayed(const Duration(milliseconds: 0), () async {
         debouncerActive = true;
+        _audioPlayer.setAsset('assets/audio/yeah.mp3');
+        await _audioPlayer.play();
         triggerThought();
         AnimeContHeight.value = 0;
         AnimeContWidth.value = 0;
