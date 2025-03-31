@@ -16,14 +16,23 @@ class Doremon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: SizedBox(
-        width: Get.width,
-        height: Get.width * (1250 / 700),
-        child: RiveAnimation.asset(
-          LottieAsset.doraemon,
-          fit: BoxFit.fitWidth,
-          onInit: controller.onRiveInit,
-        ),
+      child: Column(
+        children: [
+          const Expanded(
+            child: SizedBox(
+              height: 20,
+            ),
+          ),
+          SizedBox(
+            width: Get.width,
+            height: Get.width * (1250 / 700),
+            child: RiveAnimation.asset(
+              LottieAsset.doraemon,
+              fit: BoxFit.fitWidth,
+              onInit: controller.onRiveInit,
+            ),
+          ),
+        ],
       ),
     );
   }

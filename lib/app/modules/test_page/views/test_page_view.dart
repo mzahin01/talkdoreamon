@@ -16,7 +16,7 @@ class TestPageView extends GetView<TestPageController> {
       ),
       body: Center(
         child: Text(
-          'TestPageView is ${HomeController.to.animating}',
+          'TestPageView is ${HomeController.to.debouncerActive}',
           style: const TextStyle(fontSize: 20),
         ),
       ),

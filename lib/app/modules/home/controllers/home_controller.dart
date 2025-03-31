@@ -83,7 +83,6 @@ class HomeController extends GetxController {
       SoundService.to.stopPlaying();
       triggerSpeakFalse();
       debugPrint('=== ENDED SPEAKING ===');
-
       // Start cooldown period
       _startCooldown();
     }
@@ -116,7 +115,7 @@ class HomeController extends GetxController {
         consecutiveSilentSamples = 0;
 
         // Wait for 3 consecutive loud samples (300ms) to confirm speech
-        if (consecutiveLoudSamples >= 3) {
+        if (consecutiveLoudSamples >= 3 && !debouncerActive) {
           _startListening();
         }
       } else {
@@ -142,6 +141,7 @@ class HomeController extends GetxController {
   Future<void> _startListening() async {
     isListening = true;
     consecutiveLoudSamples = 0;
+    debouncerActive = true;
     debugPrint('=== STARTED LISTENING ===');
     await SoundService.to.recordAndReplace();
     triggerListenTrue();
@@ -164,6 +164,7 @@ class HomeController extends GetxController {
     isListening = false;
     debugPrint('=== ENDED LISTENING ===');
     triggerListenFalse();
+    debouncerActive = false;
     await SoundService.to.stopRecording();
 
     // // Process recorded audio
@@ -208,7 +209,7 @@ class HomeController extends GetxController {
   RxBool isFirstFunctionActive = true.obs;
 
   // Animation State Control Variables
-  bool animating = false;
+  bool debouncerActive = false;
 
   // Rive SMIInputs (State Machine Inputs) for different actions
   SMIInput<bool>? _flyInput;
@@ -234,26 +235,6 @@ class HomeController extends GetxController {
   SMIInput<bool>? _chicken;
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
-
-  // Toggle Function to Switch Between Two States
-  Future<void> triggerFoodAnimation() async {
-    if (isFirstFunctionActive.value) {
-      // First function state
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = Get.width;
-      foodDuration.value = 250;
-    } else {
-      // Second function state
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = 30;
-      foodDuration.value = 300;
-    }
-
-    // Toggle the state for the next call
-    isFirstFunctionActive.value = !isFirstFunctionActive.value;
-  }
 
   // Rive State Machine Initialization
   void onRiveInit(Artboard artboard) {
@@ -301,36 +282,45 @@ class HomeController extends GetxController {
   }
 
   Future<void> triggerSAndO() async {
-    triggerThought();
-    AnimeContHeight.value = 0;
-    AnimeContWidth.value = 0;
-    AnimeBottMargin.value = 30;
-    AnimeDuration.value = 300;
-    _sAndOInput?.value = true;
-
-    await Future.delayed(const Duration(milliseconds: 2000), () {
-      triggerThought();
-    });
-    await Future.delayed(const Duration(milliseconds: 700), () {
-      AnimeContHeight.value = 600;
-      AnimeContWidth.value = 300;
-      AnimeBottMargin.value = 250;
-      AnimeDuration.value = 250;
-    });
-    await Future.delayed(const Duration(milliseconds: 2000), () {
-      AnimeContHeight.value = 30;
-      AnimeContWidth.value = 30;
-      AnimeBottMargin.value = 2000;
-      AnimeDuration.value = 300;
-    });
-  }
-
-  Future<void> triggerFly() async {
-    if (animating) {
+    if (debouncerActive) {
       return;
     } else {
       await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = true;
+        debouncerActive = true;
+        triggerThought();
+        AnimeContHeight.value = 0;
+        AnimeContWidth.value = 0;
+        AnimeBottMargin.value = 30;
+        AnimeDuration.value = 300;
+        _sAndOInput?.value = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 2000), () {
+        triggerThought();
+      });
+      await Future.delayed(const Duration(milliseconds: 700), () {
+        AnimeContHeight.value = 600;
+        AnimeContWidth.value = 300;
+        AnimeBottMargin.value = 250;
+        AnimeDuration.value = 250;
+      });
+      await Future.delayed(const Duration(milliseconds: 2000), () {
+        AnimeContHeight.value = 30;
+        AnimeContWidth.value = 30;
+        AnimeBottMargin.value = 2000;
+        AnimeDuration.value = 300;
+      });
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        debouncerActive = false;
+      });
+    }
+  }
+
+  Future<void> triggerFly() async {
+    if (debouncerActive) {
+      return;
+    } else {
+      await Future.delayed(const Duration(milliseconds: 0), () {
+        debouncerActive = true;
         _flyInput?.value = true;
       });
       await Future.delayed(const Duration(milliseconds: 3000), () {
@@ -339,19 +329,18 @@ class HomeController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200), () {
         _flyInput?.value = true;
       });
-      await Future.delayed(const Duration(milliseconds: 2300), () {
-        animating = false;
+      await Future.delayed(const Duration(milliseconds: 4000), () {
+        debouncerActive = false;
       });
     }
   }
 
   Future<void> triggerTravel() async {
-    if (animating) {
+    if (debouncerActive) {
       return;
     } else {
       await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = true;
-        // triggerSAndO();
+        debouncerActive = true;
       });
       await Future.delayed(const Duration(milliseconds: 0), () {
         _travelInput?.value = true;
@@ -359,8 +348,8 @@ class HomeController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 700), () {
         next();
       });
-      await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = false;
+      await Future.delayed(const Duration(milliseconds: 1000), () {
+        debouncerActive = false;
       });
     }
   }
