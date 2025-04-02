@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -64,8 +63,8 @@ class DecibelService extends GetxService {
       weightedDecibelLevel.value = weightedSum / weightTotal;
       meanDecibelLevel.value =
           decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
-      debugPrint(
-          'Decibel level: $decibels, Mean decibel level: $meanDecibelLevel, weighted decibel level: $weightedDecibelLevel');
+      // debugPrint(
+      //     'Decibel level: $decibels, Mean decibel level: $meanDecibelLevel, weighted decibel level: $weightedDecibelLevel');
     });
 
     _recorder.startRecorder(

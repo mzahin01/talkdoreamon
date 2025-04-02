@@ -11,6 +11,7 @@ import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
 import '../../../shared/services/decible_service.dart';
 import '../../../shared/services/sound_service.dart';
+import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -244,10 +245,25 @@ class HomeController extends GetxController {
 
   // Rive State Machine Initialization
   void onRiveInit(Artboard artboard) {
-    final controller = StateMachineController.fromArtboard(
+    final controller = CustomStateMachineController.fromArtboard(
       artboard,
       'Usual',
+      onInputChanged: (id, value) {
+        // print('callback id: $id');
+        // print('numberInput id: ${_headPunchInput?.id}');
+
+        if (id == _headPunchInput?.id ||
+            id == _rightLegPunchInput?.id ||
+            id == _leftLegPunchInput?.id ||
+            id == _trunkPunchInput?.id ||
+            id == _rightHandPunchInput?.id ||
+            id == _leftHandPunchInput?.id) {
+          _audioPlayer.setAsset('assets/audio/toing_real.mp3');
+          _audioPlayer.play();
+        }
+      },
     );
+
     if (controller != null) {
       artboard.addController(controller);
 
@@ -276,6 +292,10 @@ class HomeController extends GetxController {
       _rightHandPunchInput = controller.findInput<bool>('RightHandPunch');
       _leftHandPunchInput = controller.findInput<bool>('LeftHandPunch');
       // updateButtonStates();
+
+      // controller.addEventListener((RiveEvent name) {
+      //   debugPrint(name.name);
+      // });
     }
   }
 
@@ -317,7 +337,7 @@ class HomeController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 0), () async {
         debouncerActive = true;
         _audioPlayer.setAsset('assets/audio/yeah.mp3');
-        await _audioPlayer.play();
+        _audioPlayer.play();
         triggerThought();
         AnimeContHeight.value = 0;
         AnimeContWidth.value = 0;
@@ -463,5 +483,49 @@ class HomeController extends GetxController {
 
   void RedApple() {
     _redApple?.value = true;
+  }
+}
+
+typedef InputChanged = void Function(int id, dynamic value);
+
+class CustomStateMachineController extends StateMachineController {
+  CustomStateMachineController(
+    super.stateMachine, {
+    core.OnStateChange? onStateChange,
+    required this.onInputChanged,
+  });
+
+  final InputChanged onInputChanged;
+
+  @override
+  void setInputValue(int id, value) {
+    print('Changed id: $id,  value: $value');
+    for (final input in stateMachine.inputs) {
+      if (input.id == id) {
+        // Do something with the input
+        print('Found input: $input');
+      }
+    }
+    // Or just pass it back to the calling widget
+    onInputChanged.call(id, value);
+    super.setInputValue(id, value);
+  }
+
+  static CustomStateMachineController? fromArtboard(
+    Artboard artboard,
+    String stateMachineName, {
+    core.OnStateChange? onStateChange,
+    required InputChanged onInputChanged,
+  }) {
+    for (final animation in artboard.animations) {
+      if (animation is StateMachine && animation.name == stateMachineName) {
+        return CustomStateMachineController(
+          animation,
+          onStateChange: onStateChange,
+          onInputChanged: onInputChanged,
+        );
+      }
+    }
+    return null;
   }
 }
