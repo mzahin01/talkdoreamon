@@ -11,6 +11,7 @@ import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
 import '../../../shared/services/decible_service.dart';
 import '../../../shared/services/sound_service.dart';
+// ignore: implementation_imports
 import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
 class HomeController extends GetxController {
@@ -499,11 +500,11 @@ class CustomStateMachineController extends StateMachineController {
 
   @override
   void setInputValue(int id, value) {
-    print('Changed id: $id,  value: $value');
+    debugPrint('Changed id: $id,  value: $value');
     for (final input in stateMachine.inputs) {
       if (input.id == id) {
         // Do something with the input
-        print('Found input: $input');
+        debugPrint('Found input: $input');
       }
     }
     // Or just pass it back to the calling widget
