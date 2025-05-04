@@ -29,7 +29,7 @@ class CarouselWidget extends StatelessWidget {
           itemBuilder: (context, itemIndex, realIndex) {
             return Image.asset(
               controller.bgList[itemIndex],
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             );
           },
         ),

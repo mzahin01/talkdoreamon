@@ -1,17 +1,22 @@
-// ignore_for_file: non_constant_identifier_names, avoid_print
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:rive/rive.dart';
 import 'package:talkdoraemon/app/shared/const/image_asset.dart' as cia;
 
 import '../../../shared/services/decible_service.dart';
 import '../../../shared/services/sound_service.dart';
+import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
+
+  Timer? recordingTimeoutTimer;
 
   // Background Images List
   List<String> bgList = [
@@ -24,15 +29,58 @@ class HomeController extends GetxController {
     cia.ImageAsset.background6,
   ];
 
+  // Gadget Images List
+  List<String> gadgetList = [
+    cia.ImageAsset.anywhereDoor,
+    cia.ImageAsset.memory_bread,
+    cia.ImageAsset.shrink_ray,
+    cia.ImageAsset.timeMachine,
+    cia.ImageAsset.bamboo_copter,
+  ].obs;
+
+  RxInt gadgetIndex = 0.obs;
+
+  gadgetIndexChanged() {
+    gadgetIndex.value = (DateTime.now().millisecondsSinceEpoch % 5).toInt();
+  }
+
   // Infinite Carousel Controller
   late InfiniteScrollController scrollController;
+  late AudioPlayer _audioPlayer;
 
   @override
   void onInit() {
     super.onInit();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.setAsset('assets/audio/manyToing.mp3');
+    _audioPlayer.setAsset('assets/audio/toing_real.mp3');
+    _audioPlayer.setAsset('assets/audio/yeah.mp3');
     scrollController = InfiniteScrollController();
-    DecibelService.to.meanDecibelLevel.listen(decideToListenAndSpeak);
+    DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
     SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
+    // Monitor and adjust threshold based on ambient noise
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateAmbientThreshold();
+    });
+  }
+
+  void _updateAmbientThreshold() {
+    if (ambientLevels.length >= 10) {
+      // Calculate ambient noise level (exclude outliers)
+      ambientLevels.sort();
+      var relevantSamples = ambientLevels.sublist(2, ambientLevels.length - 2);
+      var ambientNoise =
+          relevantSamples.reduce((a, b) => a + b) / relevantSamples.length;
+
+      // Set threshold dynamically (ambient + margin)
+      threshold.value = ambientNoise + 10.0;
+
+      debugPrint(
+          '${DateTime.now()} ------- Updated threshold: ${threshold.value}');
+
+      // Clear for next cycle
+      ambientLevels.clear();
+    }
   }
 
   void stopSpeakingAndStartCooldown(isPlayingSoundService) {
@@ -41,14 +89,15 @@ class HomeController extends GetxController {
       isSpeaking = false;
       SoundService.to.stopPlaying();
       triggerSpeakFalse();
-      print('=== ENDED SPEAKING ===');
-
+      debugPrint('=== ENDED SPEAKING ===');
       // Start cooldown period
       _startCooldown();
     }
   }
 
-  double threshold = 32.0;
+  RxDouble threshold = 50.0.obs;
+  List<double> ambientLevels = [];
+
   bool isListening = false;
   bool isSpeaking = false;
   int consecutiveLoudSamples = 0;
@@ -56,6 +105,11 @@ class HomeController extends GetxController {
   Timer? cooldownTimer;
 
   void decideToListenAndSpeak(double meanDb) async {
+    // Add to ambient levels when not speaking or listening
+    if (!isListening && !isSpeaking && cooldownTimer == null) {
+      ambientLevels.add(meanDb);
+    }
+
     // Cooldown period after speaking
     if (cooldownTimer != null && cooldownTimer!.isActive) {
       return;
@@ -63,12 +117,12 @@ class HomeController extends GetxController {
 
     // Speech detection logic
     if (!isListening && !isSpeaking) {
-      if (meanDb > threshold) {
+      if (meanDb > threshold.value) {
         consecutiveLoudSamples++;
         consecutiveSilentSamples = 0;
 
         // Wait for 3 consecutive loud samples (300ms) to confirm speech
-        if (consecutiveLoudSamples >= 3) {
+        if (consecutiveLoudSamples >= 3 && !debouncerActive) {
           _startListening();
         }
       } else {
@@ -78,7 +132,7 @@ class HomeController extends GetxController {
 
     // While listening, check for silence to stop recording
     if (isListening) {
-      if (meanDb < threshold) {
+      if (meanDb < threshold.value) {
         consecutiveSilentSamples++;
 
         // Wait for 5 consecutive silent samples (500ms) to confirm speech end
@@ -94,60 +148,50 @@ class HomeController extends GetxController {
   Future<void> _startListening() async {
     isListening = true;
     consecutiveLoudSamples = 0;
-    print('=== STARTED LISTENING ===');
+    debouncerActive = true;
+    debugPrint('=== STARTED LISTENING ===');
     await SoundService.to.recordAndReplace();
     triggerListenTrue();
-    // Start recording
-    // triggerListenToggle();
-    // recordSound();
-  }
 
-  Future<void> _stopListeningAndRespond() async {
-    isListening = false;
-    print('=== ENDED LISTENING ===');
-    triggerListenFalse();
-    await SoundService.to.stopRecording();
-
-    // // Process recorded audio
-    // print('=== STARTED PROCESSING ===');
-    // // await processAudio();
-    // print('=== ENDED PROCESSING ===');
-
-    // Start speaking
-    isSpeaking = true;
-    print('=== STARTED SPEAKING ===');
-    SoundService.to.play();
-    triggerSpeakTrue();
-
-    // await playModifiedAudio();
-  }
-
-  void _startCooldown() {
-    print('=== COOLDOWN STARTED ===');
-    cooldownTimer = Timer(const Duration(milliseconds: 100), () {
-      print('=== COOLDOWN ENDED ===');
+    // Start a 10-second timeout timer
+    recordingTimeoutTimer = Timer(const Duration(seconds: 10), () async {
+      if (isListening) {
+        debugPrint('=== RECORDING TIMEOUT (10s) ===');
+        await _stopListeningAndRespond();
+      }
     });
   }
 
-  // Future<void> handleSpeaking() async {
-  //   if (isListening || isSpeaking) {
-  //     return;
-  //   }
-  //   if (meanDecibelLevel < threshold && CycleOn) {
-  //     isSpeaking = true;
-  //     triggerListenToggle();
-  //     triggerSpeak();
-  //     await playSound();
-  //     // the play sound method is asynchronous, but the sound duration is not
-  //     triggerSpeak();
-  //     await Future.delayed(const Duration(milliseconds: 500));
-  //     isSpeaking = false;
-  //     CycleOn = false;
-  //   }
-  //   // print('Current decibel level: $decibelLevel');
-  // }
+// Modify _stopListeningAndRespond method
+  Future<void> _stopListeningAndRespond() async {
+    // Cancel the timeout timer if it's active
+    recordingTimeoutTimer?.cancel();
+    recordingTimeoutTimer = null;
 
-  // Carousel Navigation Methods
+    isListening = false;
+    debugPrint('=== ENDED LISTENING ===');
+    triggerListenFalse();
+    debouncerActive = false;
+    await SoundService.to.stopRecording();
+
+    // // Process recorded audio
+    //debugPrint('=== STARTED PROCESSING ===');
+    // // await processAudio();
+    //debugPrint('=== ENDED PROCESSING ===');
+    // Start speaking
+    isSpeaking = true;
+    debugPrint('=== STARTED SPEAKING ===');
+    SoundService.to.play();
+    triggerSpeakTrue();
+  }
+
+  void _startCooldown() {
+    debugPrint('=== COOLDOWN STARTED ===');
+    cooldownTimer = Timer(const Duration(seconds: 1), () {
+      debugPrint('=== COOLDOWN ENDED ===');
+    });
+  }
+
   void next() {
     scrollController.nextItem();
   }
@@ -172,7 +216,7 @@ class HomeController extends GetxController {
   RxBool isFirstFunctionActive = true.obs;
 
   // Animation State Control Variables
-  bool animating = false;
+  bool debouncerActive = false;
 
   // Rive SMIInputs (State Machine Inputs) for different actions
   SMIInput<bool>? _flyInput;
@@ -199,32 +243,27 @@ class HomeController extends GetxController {
   SMIInput<bool>? _strawberry;
   SMIInput<bool>? _redApple;
 
-  // Toggle Function to Switch Between Two States
-  Future<void> triggerFoodAnimation() async {
-    if (isFirstFunctionActive.value) {
-      // First function state
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = Get.width;
-      foodDuration.value = 250;
-    } else {
-      // Second function state
-      foodContHeight.value = 100;
-      foodContWidth.value = Get.width * 2 / 3;
-      foodRightMargin.value = 30;
-      foodDuration.value = 300;
-    }
-
-    // Toggle the state for the next call
-    isFirstFunctionActive.value = !isFirstFunctionActive.value;
-  }
-
   // Rive State Machine Initialization
   void onRiveInit(Artboard artboard) {
-    final controller = StateMachineController.fromArtboard(
+    final controller = CustomStateMachineController.fromArtboard(
       artboard,
       'Usual',
+      onInputChanged: (id, value) {
+        // print('callback id: $id');
+        // print('numberInput id: ${_headPunchInput?.id}');
+
+        if (id == _headPunchInput?.id ||
+            id == _rightLegPunchInput?.id ||
+            id == _leftLegPunchInput?.id ||
+            id == _trunkPunchInput?.id ||
+            id == _rightHandPunchInput?.id ||
+            id == _leftHandPunchInput?.id) {
+          _audioPlayer.setAsset('assets/audio/toing_real.mp3');
+          _audioPlayer.play();
+        }
+      },
     );
+
     if (controller != null) {
       artboard.addController(controller);
 
@@ -252,8 +291,35 @@ class HomeController extends GetxController {
       _trunkPunchInput = controller.findInput<bool>('TrunkPunch');
       _rightHandPunchInput = controller.findInput<bool>('RightHandPunch');
       _leftHandPunchInput = controller.findInput<bool>('LeftHandPunch');
+      // updateButtonStates();
+
+      // controller.addEventListener((RiveEvent name) {
+      //   debugPrint(name.name);
+      // });
     }
   }
+
+  // void updateButtonStates() {
+  //   // Monitor punch inputs continuously
+  //   [
+  //     _rightLegPunchInput,
+  //     _leftLegPunchInput,
+  //     _headPunchInput,
+  //     _trunkPunchInput,
+  //     _rightHandPunchInput,
+  //     _leftHandPunchInput
+  //   ].forEach((input) {
+  //     if (input?.value == true) {
+  //       // Play punch sound
+  //       _audioPlayer.seek(Duration.zero);
+  //       _audioPlayer.play();
+  //       // Reset the input after a short delay
+  //       Future.delayed(const Duration(milliseconds: 100), () {
+  //         input?.value = false;
+  //       });
+  //     }
+  //   });
+  // }
 
   // Rive Trigger Methods
   void triggerSpeakTrue() {
@@ -265,36 +331,47 @@ class HomeController extends GetxController {
   }
 
   Future<void> triggerSAndO() async {
-    triggerThought();
-    AnimeContHeight.value = 0;
-    AnimeContWidth.value = 0;
-    AnimeBottMargin.value = 30;
-    AnimeDuration.value = 300;
-    _sAndOInput?.value = true;
-
-    await Future.delayed(const Duration(milliseconds: 2000), () {
-      triggerThought();
-    });
-    await Future.delayed(const Duration(milliseconds: 700), () {
-      AnimeContHeight.value = 600;
-      AnimeContWidth.value = 300;
-      AnimeBottMargin.value = 250;
-      AnimeDuration.value = 250;
-    });
-    await Future.delayed(const Duration(milliseconds: 2000), () {
-      AnimeContHeight.value = 30;
-      AnimeContWidth.value = 30;
-      AnimeBottMargin.value = 2000;
-      AnimeDuration.value = 300;
-    });
+    if (debouncerActive) {
+      return;
+    } else {
+      await Future.delayed(const Duration(milliseconds: 0), () async {
+        debouncerActive = true;
+        _audioPlayer.setAsset('assets/audio/yeah.mp3');
+        _audioPlayer.play();
+        triggerThought();
+        AnimeContHeight.value = 0;
+        AnimeContWidth.value = 0;
+        AnimeBottMargin.value = 30;
+        AnimeDuration.value = 300;
+        _sAndOInput?.value = true;
+      });
+      await Future.delayed(const Duration(milliseconds: 2000), () {
+        triggerThought();
+      });
+      await Future.delayed(const Duration(milliseconds: 700), () {
+        AnimeContHeight.value = 600;
+        AnimeContWidth.value = 300;
+        AnimeBottMargin.value = 250;
+        AnimeDuration.value = 250;
+      });
+      await Future.delayed(const Duration(milliseconds: 2000), () {
+        AnimeContHeight.value = 30;
+        AnimeContWidth.value = 30;
+        AnimeBottMargin.value = 2000;
+        AnimeDuration.value = 300;
+      });
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        debouncerActive = false;
+      });
+    }
   }
 
   Future<void> triggerFly() async {
-    if (animating) {
+    if (debouncerActive) {
       return;
     } else {
       await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = true;
+        debouncerActive = true;
         _flyInput?.value = true;
       });
       await Future.delayed(const Duration(milliseconds: 3000), () {
@@ -303,19 +380,18 @@ class HomeController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 200), () {
         _flyInput?.value = true;
       });
-      await Future.delayed(const Duration(milliseconds: 2300), () {
-        animating = false;
+      await Future.delayed(const Duration(milliseconds: 4000), () {
+        debouncerActive = false;
       });
     }
   }
 
   Future<void> triggerTravel() async {
-    if (animating) {
+    if (debouncerActive) {
       return;
     } else {
       await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = true;
-        // triggerSAndO();
+        debouncerActive = true;
       });
       await Future.delayed(const Duration(milliseconds: 0), () {
         _travelInput?.value = true;
@@ -323,8 +399,8 @@ class HomeController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 700), () {
         next();
       });
-      await Future.delayed(const Duration(milliseconds: 0), () {
-        animating = false;
+      await Future.delayed(const Duration(milliseconds: 1000), () {
+        debouncerActive = false;
       });
     }
   }
@@ -407,5 +483,49 @@ class HomeController extends GetxController {
 
   void RedApple() {
     _redApple?.value = true;
+  }
+}
+
+typedef InputChanged = void Function(int id, dynamic value);
+
+class CustomStateMachineController extends StateMachineController {
+  CustomStateMachineController(
+    super.stateMachine, {
+    core.OnStateChange? onStateChange,
+    required this.onInputChanged,
+  });
+
+  final InputChanged onInputChanged;
+
+  @override
+  void setInputValue(int id, value) {
+    print('Changed id: $id,  value: $value');
+    for (final input in stateMachine.inputs) {
+      if (input.id == id) {
+        // Do something with the input
+        print('Found input: $input');
+      }
+    }
+    // Or just pass it back to the calling widget
+    onInputChanged.call(id, value);
+    super.setInputValue(id, value);
+  }
+
+  static CustomStateMachineController? fromArtboard(
+    Artboard artboard,
+    String stateMachineName, {
+    core.OnStateChange? onStateChange,
+    required InputChanged onInputChanged,
+  }) {
+    for (final animation in artboard.animations) {
+      if (animation is StateMachine && animation.name == stateMachineName) {
+        return CustomStateMachineController(
+          animation,
+          onStateChange: onStateChange,
+          onInputChanged: onInputChanged,
+        );
+      }
+    }
+    return null;
   }
 }

@@ -8,6 +8,8 @@ class DecibelService extends GetxService {
   RxDouble decibelLevel = 0.0.obs; // Reactive variable to track decibel level
   RxDouble meanDecibelLevel =
       0.0.obs; // Reactive variable to track mean decibel level
+  RxDouble weightedDecibelLevel =
+      0.0.obs; // Reactive variable to track weighted decibel level
   List<double> decibelLevels = [];
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   bool _isRecorderInitialized = false;
@@ -49,10 +51,20 @@ class DecibelService extends GetxService {
         decibelLevels.removeAt(0);
       }
 
-      // Calculate the average decibel level over the last 1 second
+      // Give more weight to recent values
+      double weightedSum = 0;
+      double weightTotal = 0;
+      for (int i = 0; i < decibelLevels.length; i++) {
+        double weight = (i + 1.0); // Increasing weights
+        weightedSum += decibelLevels[i] * weight;
+        weightTotal += weight;
+      }
+
+      weightedDecibelLevel.value = weightedSum / weightTotal;
       meanDecibelLevel.value =
           decibelLevels.reduce((a, b) => a + b) / decibelLevels.length;
-      // print('Decibel level: $decibels, Mean decibel level: $meanDecibelLevel');
+      // debugPrint(
+      //     'Decibel level: $decibels, Mean decibel level: $meanDecibelLevel, weighted decibel level: $weightedDecibelLevel');
     });
 
     _recorder.startRecorder(

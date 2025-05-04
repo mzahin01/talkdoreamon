@@ -19,6 +19,7 @@ class GadgetsButton extends StatelessWidget {
       child: IconButton(
         padding: EdgeInsets.zero,
         onPressed: () {
+          controller.gadgetIndexChanged();
           controller.triggerSAndO();
         },
         icon: SizedBox(
