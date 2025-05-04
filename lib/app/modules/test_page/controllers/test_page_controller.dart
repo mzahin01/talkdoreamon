@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+// ignore: implementation_imports
 import 'package:rive/src/core/core.dart';
 
 class TestPageController extends GetxController {
