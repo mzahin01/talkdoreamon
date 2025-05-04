@@ -3,8 +3,6 @@ import 'package:rive/rive.dart';
 import 'package:rive/src/core/core.dart';
 
 class TestPageController extends GetxController {
-  SMIInput<bool>? hearInput;
-  SMIInput<bool>? sadInput;
   LinearAnimation? timeline;
   StateMachineController? controller;
 
@@ -17,10 +15,7 @@ class TestPageController extends GetxController {
 
     if (controller != null) {
       artboard.addController(controller!);
-      hearInput = controller!.findInput<bool>('hear');
     }
-
-    sadInput = artboard.getBoolInput('sad', 'mouth');
 
     // Get reference to Timeline 1 animation
     timeline = artboard.animations
