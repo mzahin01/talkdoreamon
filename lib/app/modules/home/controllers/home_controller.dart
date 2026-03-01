@@ -14,10 +14,20 @@ import '../../../shared/services/sound_service.dart';
 // ignore: implementation_imports
 import 'package:rive/src/rive_core/state_machine_controller.dart' as core;
 
+/// Talking Tom-style state machine states
+enum TalkingState {
+  idle, // Monitoring ambient noise, waiting for speech
+  listening, // Recording user's voice
+  speaking, // Playing back the recorded voice
+  cooldown, // Brief pause after speaking
+}
+
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
 
   Timer? recordingTimeoutTimer;
+  Timer? cooldownTimer;
+  Timer? ambientUpdateTimer;
 
   // Background Images List
   List<String> bgList = [
@@ -49,6 +59,38 @@ class HomeController extends GetxController {
   late InfiniteScrollController scrollController;
   late AudioPlayer _audioPlayer;
 
+  // ============= TALKING SYSTEM STATE =============
+
+  /// Current state of the talking system
+  Rx<TalkingState> talkingState = TalkingState.idle.obs;
+
+  /// Dynamic threshold for voice detection (adjusts to ambient noise)
+  RxDouble threshold = 50.0.obs;
+
+  /// Collected ambient noise levels for threshold calculation
+  List<double> ambientLevels = [];
+
+  /// Counter for consecutive loud samples (to confirm speech start)
+  int consecutiveLoudSamples = 0;
+
+  /// Counter for consecutive silent samples (to confirm speech end)
+  int consecutiveSilentSamples = 0;
+
+  /// Margin above ambient noise for threshold
+  static const double thresholdMargin = 10.0;
+
+  /// Minimum consecutive loud samples to start listening (300ms)
+  static const int minLoudSamples = 3;
+
+  /// Minimum consecutive silent samples to stop listening (500ms)
+  static const int minSilentSamples = 5;
+
+  /// Maximum recording duration in seconds
+  static const int maxRecordingDuration = 10;
+
+  /// Cooldown duration after speaking in milliseconds
+  static const int cooldownDuration = 1000;
+
   @override
   void onInit() {
     super.onInit();
@@ -57,15 +99,82 @@ class HomeController extends GetxController {
     _audioPlayer.setAsset('assets/audio/toing_real.mp3');
     _audioPlayer.setAsset('assets/audio/yeah.mp3');
     scrollController = InfiniteScrollController();
-    DecibelService.to.weightedDecibelLevel.listen(decideToListenAndSpeak);
-    SoundService.to.isPlaying.listen(stopSpeakingAndStartCooldown);
-    // Monitor and adjust threshold based on ambient noise
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      _updateAmbientThreshold();
-    });
+
+    // Setup the talking system
+    _setupTalkingSystem();
   }
 
+  void _setupTalkingSystem() {
+    // Set up decibel callback for voice detection
+    DecibelService.to.onDecibelUpdate = _onDecibelUpdate;
+
+    // Listen to playback state changes
+    SoundService.to.isPlaying.listen(_onPlaybackStateChanged);
+
+    // Monitor and adjust threshold based on ambient noise
+    ambientUpdateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateAmbientThreshold();
+    });
+
+    debugPrint('[TalkingSystem] Initialized');
+  }
+
+  /// Called when decibel level is updated
+  void _onDecibelUpdate(double meanDb) {
+    switch (talkingState.value) {
+      case TalkingState.idle:
+        _handleIdleState(meanDb);
+        break;
+      case TalkingState.listening:
+        _handleListeningState(meanDb);
+        break;
+      case TalkingState.speaking:
+      case TalkingState.cooldown:
+        // Ignore audio input during speaking and cooldown
+        break;
+    }
+  }
+
+  /// Handle voice detection in idle state
+  void _handleIdleState(double meanDb) {
+    // Collect ambient levels for threshold calculation
+    ambientLevels.add(meanDb);
+
+    // Check for speech
+    if (meanDb > threshold.value) {
+      consecutiveLoudSamples++;
+      consecutiveSilentSamples = 0;
+
+      // Wait for consecutive loud samples to confirm speech start
+      if (consecutiveLoudSamples >= minLoudSamples) {
+        _startListening();
+      }
+    } else {
+      consecutiveLoudSamples = 0;
+    }
+  }
+
+  /// Handle silence detection in listening state
+  void _handleListeningState(double meanDb) {
+    if (meanDb < threshold.value) {
+      consecutiveSilentSamples++;
+
+      // Wait for consecutive silent samples to confirm speech end
+      if (consecutiveSilentSamples >= minSilentSamples) {
+        _stopListeningAndRespond();
+      }
+    } else {
+      consecutiveSilentSamples = 0;
+    }
+  }
+
+  /// Update threshold based on ambient noise
   void _updateAmbientThreshold() {
+    if (talkingState.value != TalkingState.idle) {
+      // Only update threshold when idle
+      return;
+    }
+
     if (ambientLevels.length >= 10) {
       // Calculate ambient noise level (exclude outliers)
       ambientLevels.sort();
@@ -74,123 +183,131 @@ class HomeController extends GetxController {
           relevantSamples.reduce((a, b) => a + b) / relevantSamples.length;
 
       // Set threshold dynamically (ambient + margin)
-      threshold.value = ambientNoise + 10.0;
+      threshold.value = ambientNoise + thresholdMargin;
 
       debugPrint(
-          '${DateTime.now()} ------- Updated threshold: ${threshold.value}');
+          '[TalkingSystem] Updated threshold: ${threshold.value.toStringAsFixed(1)} (ambient: ${ambientNoise.toStringAsFixed(1)})');
 
       // Clear for next cycle
       ambientLevels.clear();
     }
   }
 
-  void stopSpeakingAndStartCooldown(isPlayingSoundService) {
-    if (isSpeaking && !isPlayingSoundService) {
-      // End speaking
-      isSpeaking = false;
-      SoundService.to.stopPlaying();
-      triggerSpeakFalse();
-      debugPrint('=== ENDED SPEAKING ===');
-      // Start cooldown period
-      _startCooldown();
+  /// Called when playback state changes
+  void _onPlaybackStateChanged(bool isPlaying) {
+    if (talkingState.value == TalkingState.speaking && !isPlaying) {
+      // Playback finished
+      _onSpeakingFinished();
     }
   }
 
-  RxDouble threshold = 50.0.obs;
-  List<double> ambientLevels = [];
-
-  bool isListening = false;
-  bool isSpeaking = false;
-  int consecutiveLoudSamples = 0;
-  int consecutiveSilentSamples = 0;
-  Timer? cooldownTimer;
-
-  void decideToListenAndSpeak(double meanDb) async {
-    // Add to ambient levels when not speaking or listening
-    if (!isListening && !isSpeaking && cooldownTimer == null) {
-      ambientLevels.add(meanDb);
-    }
-
-    // Cooldown period after speaking
-    if (cooldownTimer != null && cooldownTimer!.isActive) {
-      return;
-    }
-
-    // Speech detection logic
-    if (!isListening && !isSpeaking) {
-      if (meanDb > threshold.value) {
-        consecutiveLoudSamples++;
-        consecutiveSilentSamples = 0;
-
-        // Wait for 3 consecutive loud samples (300ms) to confirm speech
-        if (consecutiveLoudSamples >= 3 && !debouncerActive) {
-          _startListening();
-        }
-      } else {
-        consecutiveLoudSamples = 0;
-      }
-    }
-
-    // While listening, check for silence to stop recording
-    if (isListening) {
-      if (meanDb < threshold.value) {
-        consecutiveSilentSamples++;
-
-        // Wait for 5 consecutive silent samples (500ms) to confirm speech end
-        if (consecutiveSilentSamples >= 5) {
-          await _stopListeningAndRespond();
-        }
-      } else {
-        consecutiveSilentSamples = 0;
-      }
-    }
-  }
-
+  /// Start listening/recording
   Future<void> _startListening() async {
-    isListening = true;
+    if (talkingState.value != TalkingState.idle) return;
+
+    debugPrint('[TalkingSystem] === STARTED LISTENING ===');
+
+    talkingState.value = TalkingState.listening;
     consecutiveLoudSamples = 0;
-    debouncerActive = true;
-    debugPrint('=== STARTED LISTENING ===');
-    await SoundService.to.recordAndReplace();
+    consecutiveSilentSamples = 0;
+
+    // Start capturing voice using DecibelService
+    await DecibelService.to.startCapture();
+
+    // Trigger listening animation
     triggerListenTrue();
 
-    // Start a 10-second timeout timer
-    recordingTimeoutTimer = Timer(const Duration(seconds: 10), () async {
-      if (isListening) {
-        debugPrint('=== RECORDING TIMEOUT (10s) ===');
-        await _stopListeningAndRespond();
+    // Start a timeout timer to prevent endless recording
+    recordingTimeoutTimer =
+        Timer(const Duration(seconds: maxRecordingDuration), () {
+      if (talkingState.value == TalkingState.listening) {
+        debugPrint('[TalkingSystem] === RECORDING TIMEOUT ===');
+        _stopListeningAndRespond();
       }
     });
   }
 
-// Modify _stopListeningAndRespond method
+  /// Stop listening and start playback
   Future<void> _stopListeningAndRespond() async {
-    // Cancel the timeout timer if it's active
+    if (talkingState.value != TalkingState.listening) return;
+
+    // Cancel the timeout timer
     recordingTimeoutTimer?.cancel();
     recordingTimeoutTimer = null;
 
-    isListening = false;
-    debugPrint('=== ENDED LISTENING ===');
-    triggerListenFalse();
-    debouncerActive = false;
-    await SoundService.to.stopRecording();
+    debugPrint('[TalkingSystem] === ENDED LISTENING ===');
 
-    // // Process recorded audio
-    //debugPrint('=== STARTED PROCESSING ===');
-    // // await processAudio();
-    //debugPrint('=== ENDED PROCESSING ===');
-    // Start speaking
-    isSpeaking = true;
-    debugPrint('=== STARTED SPEAKING ===');
-    SoundService.to.play();
-    triggerSpeakTrue();
+    // Stop listening animation
+    triggerListenFalse();
+
+    // Stop capturing and get the audio file path
+    final audioPath = await DecibelService.to.stopCapture();
+
+    if (audioPath != null) {
+      // Set the audio file for playback
+      SoundService.to.setAudioFile(audioPath);
+
+      // Pause decibel monitoring during playback (prevent feedback)
+      await DecibelService.to.pauseMonitoring();
+
+      // Start speaking
+      talkingState.value = TalkingState.speaking;
+      debugPrint('[TalkingSystem] === STARTED SPEAKING ===');
+
+      // Trigger speak animation
+      triggerSpeakTrue();
+
+      // Play the audio
+      final played = await SoundService.to.play();
+
+      if (!played) {
+        // Playback failed, go directly to cooldown
+        debugPrint('[TalkingSystem] Playback failed, entering cooldown');
+        _onSpeakingFinished();
+      }
+    } else {
+      // No audio captured, go back to idle
+      debugPrint('[TalkingSystem] No audio captured, returning to idle');
+      talkingState.value = TalkingState.idle;
+      await DecibelService.to.resumeMonitoring();
+    }
   }
 
-  void _startCooldown() {
-    debugPrint('=== COOLDOWN STARTED ===');
-    cooldownTimer = Timer(const Duration(seconds: 1), () {
-      debugPrint('=== COOLDOWN ENDED ===');
+  /// Called when speaking/playback is finished
+  Future<void> _onSpeakingFinished() async {
+    debugPrint('[TalkingSystem] === ENDED SPEAKING ===');
+
+    // Stop speak animation
+    triggerSpeakFalse();
+
+    // Enter cooldown state
+    talkingState.value = TalkingState.cooldown;
+    debugPrint('[TalkingSystem] === COOLDOWN STARTED ===');
+
+    // Start cooldown timer
+    cooldownTimer =
+        Timer(const Duration(milliseconds: cooldownDuration), () async {
+      debugPrint('[TalkingSystem] === COOLDOWN ENDED ===');
+
+      // Resume decibel monitoring
+      await DecibelService.to.resumeMonitoring();
+
+      // Reset counters
+      consecutiveLoudSamples = 0;
+      consecutiveSilentSamples = 0;
+      ambientLevels.clear();
+
+      // Return to idle state
+      talkingState.value = TalkingState.idle;
     });
+  }
+
+  @override
+  void onClose() {
+    recordingTimeoutTimer?.cancel();
+    cooldownTimer?.cancel();
+    ambientUpdateTimer?.cancel();
+    super.onClose();
   }
 
   void next() {
